@@ -55,6 +55,8 @@ app.use('/v1/api/chat', chatRoutes);
 app.use('/v1/api/auth', authRoutes);
 import favouritesRouter from "./src/routes/favourites.routes.js";
 app.use("/v1/api", favouritesRouter);
+import debugRouter from './src/routes/debug.routes.js';
+app.use('/v1/api', debugRouter);
 
 // **E-commerce routes**
 app.use('/v1/api/ecommerce', ecommerceRoutes);

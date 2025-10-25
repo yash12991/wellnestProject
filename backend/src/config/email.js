@@ -39,6 +39,15 @@ console.info('[email] transporter options:', { host: smtpHost, port: smtpPort, s
 
 const transporter = nodemailer.createTransport(transporterOptions);
 
+// Verify transporter connectivity at startup so Render logs capture connection errors early.
+transporter.verify((err, success) => {
+    if (err) {
+        console.error('[email] transporter verify error:', err && err.message ? err.message : err);
+    } else {
+        console.info('[email] transporter is ready to send messages');
+    }
+});
+
 // Generate OTP
 export const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
