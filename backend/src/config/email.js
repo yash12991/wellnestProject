@@ -49,40 +49,65 @@ export const sendOTPEmail = async (email, otp) => {
         const { data, error } = await resend.emails.send({
             from: 'WellNest <onboarding@resend.dev>', // Use onboarding@resend.dev for testing, or your verified domain
             to: email,
-            subject: "Your Wellnest OTP – Verify Your Email",
+            subject: "Verify Your Email - WellNest OTP Code",
+            // Add reply-to for better deliverability
+            reply_to: 'support@wellnest.com',
+            // Add text version for better spam score
+            text: `Welcome to WellNest!
+
+Hi there,
+
+Thank you for registering with WellNest. Please verify your email address using the OTP below:
+
+Your OTP Code: ${otp}
+
+This OTP will expire in 10 minutes.
+
+If you didn't create an account with WellNest, you can safely ignore this email.
+
+Best regards,
+The WellNest Team
+
+---
+This is an automated email, please do not reply.
+© 2025 WellNest. All rights reserved.`,
             html: `
-            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden;">
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Verify Your Email - WellNest</title>
+            </head>
+            <body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; background-color: #ffffff;">
                 <div style="background: linear-gradient(90deg, #05d8a7, #018940); padding: 20px; text-align: center;">
-                    <img src="..../frontend/assets/wellnest-logo.png" alt="Wellnest Logo" style="height: 50px; margin-bottom: 10px;">
-                    <h2 style="color: #fff; margin: 0; font-weight: 600;">Welcome to Wellnest!</h2>
+                    <h2 style="color: #fff; margin: 0; font-weight: 600;">Welcome to WellNest!</h2>
                 </div>
                 <div style="padding: 30px; background-color: #fff; color: #333;">
                     <p style="font-size: 16px; margin-bottom: 20px;">Hi there,</p>
-                    <p style="font-size: 15px; margin-bottom: 30px;">
-                        Thank you for registering with <strong>Wellnest</strong>. Please verify your email address using the OTP below:
+                    <p style="font-size: 15px; margin-bottom: 30px; line-height: 1.6;">
+                        Thank you for registering with <strong>WellNest</strong>. Please verify your email address using the One-Time Password (OTP) below:
                     </p>
                     <div style="text-align: center; margin-bottom: 30px;">
-                        <span style="display: inline-block; background: #f5f5f5; padding: 15px 40px; font-size: 28px; letter-spacing: 8px; font-weight: bold; color: #018940; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                        <div style="display: inline-block; background: #f5f5f5; padding: 15px 40px; font-size: 28px; letter-spacing: 8px; font-weight: bold; color: #018940; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                             ${otp}
-                        </span>
+                        </div>
                     </div>
                     <p style="font-size: 14px; color: #555; margin-bottom: 10px;">
                         This OTP will expire in <strong>10 minutes</strong>.
                     </p>
-                    <p style="font-size: 14px; color: #555;">
-                        If you didn't create an account with Wellnest, you can safely ignore this email.
+                    <p style="font-size: 14px; color: #555; line-height: 1.6;">
+                        If you didn't create an account with WellNest, you can safely ignore this email.
                     </p>
-                    <div style="margin-top: 30px; text-align: center;">
-                        <a href="https://wellnest.com/login" style="background-color: #05d8a7; color: #fff; text-decoration: none; padding: 12px 25px; border-radius: 6px; font-weight: bold; font-size: 15px; display: inline-block;">
-                            Go to Wellnest
-                        </a>
-                    </div>
                 </div>
                 <div style="background-color: #f0f0f0; padding: 15px; text-align: center; font-size: 12px; color: #777;">
-                    <p style="margin: 0;">This is an automated email, please do not reply.</p>
-                    <p style="margin: 0;">&copy; 2025 Wellnest. All rights reserved.</p>
+                    <p style="margin: 5px 0;">This is an automated email, please do not reply.</p>
+                    <p style="margin: 5px 0;">&copy; 2025 WellNest. All rights reserved.</p>
                 </div>
             </div>
+            </body>
+            </html>
             `,
         });
 
@@ -199,7 +224,8 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
         const { data, error } = await resend.emails.send({
             from: 'WellNest <onboarding@resend.dev>', // Use onboarding@resend.dev for testing, or your verified domain
             to: email,
-            subject: `🍽️ Your Weekly Meal Plan from WellNest (${isActualPDF ? 'PDF' : 'Document'} Attached)`,
+            subject: `Your Weekly Meal Plan from WellNest`,
+            reply_to: 'support@wellnest.com',
             attachments: [
                 {
                     filename: `${username.replace(/[^a-zA-Z0-9]/g, '_')}_Weekly_Meal_Plan_${new Date().toISOString().split('T')[0]}.${fileExtension}`,
