@@ -5,46 +5,33 @@ import { generateMealPlanPDF } from '../utils/pdfGenerator.js';
 // Load environment variables
 dotenv.config();
 
-// Configure transporter via environment variables so it can be switched
-// between Gmail, SendGrid, Mailgun, etc. in production without code changes.
-// Recommended env vars:
-// - SMTP_HOST (e.g. smtp.sendgrid.net or smtp.gmail.com)
-// - SMTP_PORT (e.g. 587)
-// - SMTP_SECURE (true for 465, false for 587)
-// - SMTP_USER
-// - SMTP_PASS
-// - EMAIL_FROM (optional override for the "from" address)
-
-const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
-const smtpPort = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587;
-const smtpSecure = process.env.SMTP_SECURE === 'true' || smtpPort === 465;
-const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER;
-const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
-
-const transporterOptions = {
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpSecure,
-    auth: smtpUser && smtpPass ? { user: smtpUser, pass: smtpPass } : undefined,
-    // timeouts to fail faster and surface better errors in logs
-    connectionTimeout: process.env.SMTP_CONNECTION_TIMEOUT ? parseInt(process.env.SMTP_CONNECTION_TIMEOUT, 10) : 10000,
-    greetingTimeout: process.env.SMTP_GREETING_TIMEOUT ? parseInt(process.env.SMTP_GREETING_TIMEOUT, 10) : 5000,
-    // recommended for some cloud providers that intercept TLS
-    tls: {
-        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED !== 'false',
+// Enhanced transporter configuration for Render deployment
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS, // Must be App Password, not regular Gmail password
     },
-};
+    tls: {
+        rejectUnauthorized: false, // Allow self-signed certificates
+    },
+    debug: true, // Enable debug output
+    logger: true, // Log to console
+});
 
-console.info('[email] transporter options:', { host: smtpHost, port: smtpPort, secure: smtpSecure, authConfigured: !!transporterOptions.auth });
-
-const transporter = nodemailer.createTransport(transporterOptions);
-
-// Verify transporter connectivity at startup so Render logs capture connection errors early.
-transporter.verify((err, success) => {
-    if (err) {
-        console.error('[email] transporter verify error:', err && err.message ? err.message : err);
+// Verify transporter configuration on startup
+transporter.verify(function (error, success) {
+    if (error) {
+        console.error("❌ Email transporter configuration error:", error);
+        console.error("📧 Check your EMAIL_USER and EMAIL_PASS environment variables");
+        console.error("🔐 EMAIL_PASS must be a Gmail App Password (not your regular password)");
+        console.error("📝 Guide: https://support.google.com/accounts/answer/185833");
     } else {
-        console.info('[email] transporter is ready to send messages');
+        console.log("✅ Email server is ready to send messages");
+        console.log("📧 Email configured with:", process.env.EMAIL_USER);
     }
 });
 
@@ -56,6 +43,12 @@ export const generateOTP = () => {
 // Send OTP email
 export const sendOTPEmail = async (email, otp) => {
     try {
+        // Validate environment variables
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error("❌ EMAIL_USER or EMAIL_PASS environment variables are not set");
+            throw new Error("Email configuration is missing. Please set EMAIL_USER and EMAIL_PASS environment variables.");
+        }
+
         console.log(`📧 Attempting to send OTP email to: ${email}`);
         
         const info = await transporter.sendMail({
@@ -98,17 +91,26 @@ export const sendOTPEmail = async (email, otp) => {
             `,
         });
 
-        console.log("✅ OTP Email sent successfully: ", info.response);
-        console.log("📬 Message ID:", info.messageId);
+        console.log("✅ OTP Email sent successfully:", info.messageId);
+        console.log("📬 Response:", info.response);
         return true;
     } catch (error) {
         console.error("❌ Failed to send OTP email:", error.message);
-        console.error("Error details:", {
+        console.error("📋 Error details:", {
             code: error.code,
             command: error.command,
             response: error.response,
             responseCode: error.responseCode
         });
+        
+        // Provide helpful error messages
+        if (error.code === 'EAUTH') {
+            console.error("🔐 Authentication failed. Make sure EMAIL_PASS is a Gmail App Password, not your regular password.");
+            console.error("📝 Create an App Password: https://support.google.com/accounts/answer/185833");
+        } else if (error.code === 'ECONNECTION' || error.code === 'ETIMEDOUT') {
+            console.error("🌐 Network connection failed. Check your internet connection or firewall settings.");
+        }
+        
         return false;
     }
 };
@@ -117,6 +119,12 @@ export const sendOTPEmail = async (email, otp) => {
 // Send meal plan email with PDF attachment
 export const sendMealPlanEmail = async (email, username, mealPlan) => {
     try {
+        // Validate environment variables
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error("❌ EMAIL_USER or EMAIL_PASS environment variables are not set");
+            throw new Error("Email configuration is missing. Please set EMAIL_USER and EMAIL_PASS environment variables.");
+        }
+
         console.log(`📧 Attempting to send meal plan email to: ${email}`);
         
         // Generate PDF attachment
@@ -331,17 +339,26 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
             `,
         });
 
-        console.log("✅ Meal Plan Email sent successfully: ", info.response);
-        console.log("📬 Message ID:", info.messageId);
+        console.log("✅ Meal Plan Email sent successfully:", info.messageId);
+        console.log("📬 Response:", info.response);
         return true;
     } catch (error) {
         console.error("❌ Failed to send meal plan email:", error.message);
-        console.error("Error details:", {
+        console.error("📋 Error details:", {
             code: error.code,
             command: error.command,
             response: error.response,
             responseCode: error.responseCode
         });
+        
+        // Provide helpful error messages
+        if (error.code === 'EAUTH') {
+            console.error("🔐 Authentication failed. Make sure EMAIL_PASS is a Gmail App Password, not your regular password.");
+            console.error("📝 Create an App Password: https://support.google.com/accounts/answer/185833");
+        } else if (error.code === 'ECONNECTION' || error.code === 'ETIMEDOUT') {
+            console.error("🌐 Network connection failed. Check your internet connection or firewall settings.");
+        }
+        
         return false;
     }
 };
