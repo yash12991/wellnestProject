@@ -6,15 +6,21 @@ import { generateMealPlanPDF } from '../utils/pdfGenerator.js';
 dotenv.config();
 
 // Initialize Resend with API key
-const resend = new Resend(process.env.RESEND_API_KEY || process.env.resendapikey);
+let resend = null;
+const apiKey = process.env.RESEND_API_KEY || process.env.resendapikey;
 
-// Verify Resend configuration on startup
-if (process.env.RESEND_API_KEY || process.env.resendapikey) {
-    console.log("✅ Resend email service initialized");
-    console.log("� Emails will be sent from: onboarding@resend.dev (or your verified domain)");
-} else {
-    console.error("❌ RESEND_API_KEY is not set in environment variables");
-    console.error("� Get your API key from: https://resend.com/api-keys");
+try {
+    if (apiKey) {
+        resend = new Resend(apiKey);
+        console.log("✅ Resend email service initialized");
+        console.log("📧 Emails will be sent from: onboarding@resend.dev (or your verified domain)");
+    } else {
+        console.warn("⚠️  RESEND_API_KEY is not set in environment variables");
+        console.warn("📝 Email functionality will be limited. Get your API key from: https://resend.com/api-keys");
+    }
+} catch (error) {
+    console.error("❌ Failed to initialize Resend:", error.message);
+    console.warn("⚠️  Email functionality will be limited");
 }
 
 // Generate OTP
@@ -25,6 +31,12 @@ export const generateOTP = () => {
 // Send OTP email
 export const sendOTPEmail = async (email, otp) => {
     try {
+        // Check if Resend is initialized
+        if (!resend) {
+            console.error("❌ Resend is not initialized. Cannot send email.");
+            throw new Error("Email service is not configured. Please contact support.");
+        }
+
         // Validate environment variables
         const apiKey = process.env.RESEND_API_KEY || process.env.resendapikey;
         if (!apiKey) {
@@ -102,6 +114,12 @@ export const sendOTPEmail = async (email, otp) => {
 // Send meal plan email with PDF attachment
 export const sendMealPlanEmail = async (email, username, mealPlan) => {
     try {
+        // Check if Resend is initialized
+        if (!resend) {
+            console.error("❌ Resend is not initialized. Cannot send email.");
+            throw new Error("Email service is not configured. Please contact support.");
+        }
+
         // Validate environment variables
         const apiKey = process.env.RESEND_API_KEY || process.env.resendapikey;
         if (!apiKey) {
@@ -349,6 +367,12 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
 // test function
 export const sendTestMail = async () => {
     try {
+        // Check if Resend is initialized
+        if (!resend) {
+            console.error("❌ Resend is not initialized. Cannot send email.");
+            return false;
+        }
+
         const { data, error } = await resend.emails.send({
             from: 'WellNest <onboarding@resend.dev>',
             to: "Yash129912@gmail.com", // test email
