@@ -57,8 +57,6 @@ import favouritesRouter from "./src/routes/favourites.routes.js";
 app.use("/v1/api", favouritesRouter);
 import debugRouter from './src/routes/debug.routes.js';
 app.use('/v1/api', debugRouter);
-import smtpCheckRouter from './src/routes/smtpcheck.routes.js';
-app.use('/v1/api', smtpCheckRouter);
 
 // **E-commerce routes**
 app.use('/v1/api/ecommerce', ecommerceRoutes);
