@@ -3,6 +3,12 @@
 const fallbackOrigin = (typeof window !== 'undefined' && window.location) ? `${window.location.protocol}//${window.location.host}` : '';
 export const API_URL = import.meta.env.VITE_API_URL || (window.__env && window.__env.VITE_API_URL) || fallbackOrigin;
 
+// Helpful debug: show which backend URL the client will use. This will appear in the browser console.
+if (typeof window !== 'undefined' && window.console && process.env.NODE_ENV !== 'test') {
+    // Use console.info so it's visible but not noisy in production logs.
+    console.info('[API] Resolved API_URL ->', API_URL);
+}
+
 // API Endpoints
 export const API_ENDPOINTS = {
     // Auth endpoints
