@@ -1,39 +1,21 @@
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
 import dotenv from 'dotenv';
 import { generateMealPlanPDF } from '../utils/pdfGenerator.js';
 
 // Load environment variables
 dotenv.config();
 
-// Enhanced transporter configuration for Render deployment
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // Must be App Password, not regular Gmail password
-    },
-    tls: {
-        rejectUnauthorized: false, // Allow self-signed certificates
-    },
-    debug: true, // Enable debug output
-    logger: true, // Log to console
-});
+// Initialize Resend with API key
+const resend = new Resend(process.env.RESEND_API_KEY || process.env.resendapikey);
 
-// Verify transporter configuration on startup
-transporter.verify(function (error, success) {
-    if (error) {
-        console.error("❌ Email transporter configuration error:", error);
-        console.error("📧 Check your EMAIL_USER and EMAIL_PASS environment variables");
-        console.error("🔐 EMAIL_PASS must be a Gmail App Password (not your regular password)");
-        console.error("📝 Guide: https://support.google.com/accounts/answer/185833");
-    } else {
-        console.log("✅ Email server is ready to send messages");
-        console.log("📧 Email configured with:", process.env.EMAIL_USER);
-    }
-});
+// Verify Resend configuration on startup
+if (process.env.RESEND_API_KEY || process.env.resendapikey) {
+    console.log("✅ Resend email service initialized");
+    console.log("� Emails will be sent from: onboarding@resend.dev (or your verified domain)");
+} else {
+    console.error("❌ RESEND_API_KEY is not set in environment variables");
+    console.error("� Get your API key from: https://resend.com/api-keys");
+}
 
 // Generate OTP
 export const generateOTP = () => {
@@ -44,15 +26,16 @@ export const generateOTP = () => {
 export const sendOTPEmail = async (email, otp) => {
     try {
         // Validate environment variables
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.error("❌ EMAIL_USER or EMAIL_PASS environment variables are not set");
-            throw new Error("Email configuration is missing. Please set EMAIL_USER and EMAIL_PASS environment variables.");
+        const apiKey = process.env.RESEND_API_KEY || process.env.resendapikey;
+        if (!apiKey) {
+            console.error("❌ RESEND_API_KEY environment variable is not set");
+            throw new Error("Email configuration is missing. Please set RESEND_API_KEY environment variable.");
         }
 
         console.log(`📧 Attempting to send OTP email to: ${email}`);
         
-        const info = await transporter.sendMail({
-            from: `"Wellnest Team" <${process.env.EMAIL_USER}>`,
+        const { data, error } = await resend.emails.send({
+            from: 'WellNest <onboarding@resend.dev>', // Use onboarding@resend.dev for testing, or your verified domain
             to: email,
             subject: "Your Wellnest OTP – Verify Your Email",
             html: `
@@ -91,24 +74,24 @@ export const sendOTPEmail = async (email, otp) => {
             `,
         });
 
-        console.log("✅ OTP Email sent successfully:", info.messageId);
-        console.log("📬 Response:", info.response);
+        if (error) {
+            console.error("❌ Resend API Error:", error);
+            throw error;
+        }
+
+        console.log("✅ OTP Email sent successfully via Resend:", data.id);
         return true;
     } catch (error) {
         console.error("❌ Failed to send OTP email:", error.message);
-        console.error("📋 Error details:", {
-            code: error.code,
-            command: error.command,
-            response: error.response,
-            responseCode: error.responseCode
-        });
+        console.error("📋 Error details:", error);
         
         // Provide helpful error messages
-        if (error.code === 'EAUTH') {
-            console.error("🔐 Authentication failed. Make sure EMAIL_PASS is a Gmail App Password, not your regular password.");
-            console.error("📝 Create an App Password: https://support.google.com/accounts/answer/185833");
-        } else if (error.code === 'ECONNECTION' || error.code === 'ETIMEDOUT') {
-            console.error("🌐 Network connection failed. Check your internet connection or firewall settings.");
+        if (error.message?.includes('API key')) {
+            console.error("🔐 Invalid Resend API key. Check your RESEND_API_KEY environment variable.");
+            console.error("📝 Get your API key: https://resend.com/api-keys");
+        } else if (error.message?.includes('domain')) {
+            console.error("📧 Domain not verified. Use onboarding@resend.dev for testing or verify your domain.");
+            console.error("📝 Verify domain: https://resend.com/domains");
         }
         
         return false;
@@ -120,9 +103,10 @@ export const sendOTPEmail = async (email, otp) => {
 export const sendMealPlanEmail = async (email, username, mealPlan) => {
     try {
         // Validate environment variables
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.error("❌ EMAIL_USER or EMAIL_PASS environment variables are not set");
-            throw new Error("Email configuration is missing. Please set EMAIL_USER and EMAIL_PASS environment variables.");
+        const apiKey = process.env.RESEND_API_KEY || process.env.resendapikey;
+        if (!apiKey) {
+            console.error("❌ RESEND_API_KEY environment variable is not set");
+            throw new Error("Email configuration is missing. Please set RESEND_API_KEY environment variable.");
         }
 
         console.log(`📧 Attempting to send meal plan email to: ${email}`);
@@ -194,15 +178,14 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
         
         console.log(`Generated ${isActualPDF ? 'PDF' : 'text document'} for ${username}, size: ${pdfBuffer.length} bytes`);
 
-        const info = await transporter.sendMail({
-            from: `"Wellnest Team" <${process.env.EMAIL_USER}>`,
+        const { data, error } = await resend.emails.send({
+            from: 'WellNest <onboarding@resend.dev>', // Use onboarding@resend.dev for testing, or your verified domain
             to: email,
             subject: `🍽️ Your Weekly Meal Plan from WellNest (${isActualPDF ? 'PDF' : 'Document'} Attached)`,
             attachments: [
                 {
                     filename: `${username.replace(/[^a-zA-Z0-9]/g, '_')}_Weekly_Meal_Plan_${new Date().toISOString().split('T')[0]}.${fileExtension}`,
                     content: pdfBuffer,
-                    contentType: contentType
                 }
             ],
             html: `
@@ -339,24 +322,24 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
             `,
         });
 
-        console.log("✅ Meal Plan Email sent successfully:", info.messageId);
-        console.log("📬 Response:", info.response);
+        if (error) {
+            console.error("❌ Resend API Error:", error);
+            throw error;
+        }
+
+        console.log("✅ Meal Plan Email sent successfully via Resend:", data.id);
         return true;
     } catch (error) {
         console.error("❌ Failed to send meal plan email:", error.message);
-        console.error("📋 Error details:", {
-            code: error.code,
-            command: error.command,
-            response: error.response,
-            responseCode: error.responseCode
-        });
+        console.error("📋 Error details:", error);
         
         // Provide helpful error messages
-        if (error.code === 'EAUTH') {
-            console.error("🔐 Authentication failed. Make sure EMAIL_PASS is a Gmail App Password, not your regular password.");
-            console.error("📝 Create an App Password: https://support.google.com/accounts/answer/185833");
-        } else if (error.code === 'ECONNECTION' || error.code === 'ETIMEDOUT') {
-            console.error("🌐 Network connection failed. Check your internet connection or firewall settings.");
+        if (error.message?.includes('API key')) {
+            console.error("🔐 Invalid Resend API key. Check your RESEND_API_KEY environment variable.");
+            console.error("📝 Get your API key: https://resend.com/api-keys");
+        } else if (error.message?.includes('domain')) {
+            console.error("📧 Domain not verified. Use onboarding@resend.dev for testing or verify your domain.");
+            console.error("📝 Verify domain: https://resend.com/domains");
         }
         
         return false;
@@ -366,14 +349,22 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
 // test function
 export const sendTestMail = async () => {
     try {
-        const info = await transporter.sendMail({
-            from: process.env.EMAIL_USER,
+        const { data, error } = await resend.emails.send({
+            from: 'WellNest <onboarding@resend.dev>',
             to: "Yash129912@gmail.com", // test email
-            subject: "Test OTP",
-            text: "This is a test mail from Nodemailer + Gmail",
+            subject: "Test Email from WellNest",
+            html: "<p>This is a test email from <strong>WellNest</strong> using Resend API!</p>",
         });
-        console.log(" Email sent: ", info.response);
+
+        if (error) {
+            console.error("❌ Email error:", error);
+            return false;
+        }
+
+        console.log("✅ Email sent:", data.id);
+        return true;
     } catch (error) {
-        console.error(" Email error:", error);
+        console.error("❌ Email error:", error);
+        return false;
     }
 };
