@@ -22,7 +22,8 @@
     "mongoose": "^7.4.3",
     "node-cache": "^5.1.2",
     "nodemailer": "^7.0.6",
-  "puppeteer": "^24.15.0",
+    "puppeteer": "^24.15.0",
+    "serverless-http": "^3.0.0",
     "stripe": "^19.1.0"
   },
   "devDependencies": {

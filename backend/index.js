@@ -60,10 +60,12 @@ app.use("/v1/api", favouritesRouter);
 app.use('/v1/api/ecommerce', ecommerceRoutes);
 app.use("/api/products", productRoutes);
 
-// Start server
+// Start server when not running as a Vercel serverless function
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
 
 export default app;
