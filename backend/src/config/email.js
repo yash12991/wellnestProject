@@ -5,13 +5,39 @@ import { generateMealPlanPDF } from '../utils/pdfGenerator.js';
 // Load environment variables
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+// Configure transporter via environment variables so it can be switched
+// between Gmail, SendGrid, Mailgun, etc. in production without code changes.
+// Recommended env vars:
+// - SMTP_HOST (e.g. smtp.sendgrid.net or smtp.gmail.com)
+// - SMTP_PORT (e.g. 587)
+// - SMTP_SECURE (true for 465, false for 587)
+// - SMTP_USER
+// - SMTP_PASS
+// - EMAIL_FROM (optional override for the "from" address)
+
+const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+const smtpPort = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT, 10) : 587;
+const smtpSecure = process.env.SMTP_SECURE === 'true' || smtpPort === 465;
+const smtpUser = process.env.SMTP_USER || process.env.EMAIL_USER;
+const smtpPass = process.env.SMTP_PASS || process.env.EMAIL_PASS;
+
+const transporterOptions = {
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    auth: smtpUser && smtpPass ? { user: smtpUser, pass: smtpPass } : undefined,
+    // timeouts to fail faster and surface better errors in logs
+    connectionTimeout: process.env.SMTP_CONNECTION_TIMEOUT ? parseInt(process.env.SMTP_CONNECTION_TIMEOUT, 10) : 10000,
+    greetingTimeout: process.env.SMTP_GREETING_TIMEOUT ? parseInt(process.env.SMTP_GREETING_TIMEOUT, 10) : 5000,
+    // recommended for some cloud providers that intercept TLS
+    tls: {
+        rejectUnauthorized: process.env.SMTP_REJECT_UNAUTHORIZED !== 'false',
     },
-});
+};
+
+console.info('[email] transporter options:', { host: smtpHost, port: smtpPort, secure: smtpSecure, authConfigured: !!transporterOptions.auth });
+
+const transporter = nodemailer.createTransport(transporterOptions);
 
 // Generate OTP
 export const generateOTP = () => {
