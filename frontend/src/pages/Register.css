@@ -1,0 +1,341 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #282828;
+}
+
+/* OTP Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scaleX(0.8);
+  }
+}
+
+.register-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+.register-image-section {
+  flex: 0.7;
+  position: relative;
+  padding: 2%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 0px 18px 18px 0px;
+}
+
+.register-image-text h1 {
+  position: absolute;
+  top: 8%;
+  left: 12%;
+  font-weight: 600;
+  color: #f7f7f7;
+  font-family: "Poppins", sans-serif;
+  font-size: 2.4rem;
+}
+
+.register-image-text h2 {
+  position: absolute;
+  bottom: 8%;
+  left: 12%;
+  width: 70%;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 1px;
+}
+
+.BackButton {
+  position: absolute;
+  top: 8%;
+  right: 8%;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.BackButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.register-form-section {
+  flex: 1;
+  background-color: #232323;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.register-form {
+  background-color: #313131;
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.register-form h2 {
+  color: white;
+  margin-bottom: 20px;
+  text-align: start;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.register-form p {
+  color: #aaa;
+  margin-bottom: 20px;
+  text-align: start;
+  font-size: 0.95rem;
+}
+
+.register-form a {
+  text-decoration: none;
+  color: #05d8a7;
+  font-weight: bold;
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form-group input {
+  width: 50%;
+  padding: 12px;
+  border: 1px solid #555;
+  background-color: #333;
+  color: white;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+input[type="email"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #05d8a7;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.terms {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin: 15px 0;
+  color: #888;
+  font-size: 14px;
+}
+
+.create-account-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #05d8a7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-account-btn:hover {
+  background-color: #04c695;
+}
+
+.create-account-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.register-loading, .verify-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.register-loading .loader-btn, .verify-loading .loader-btn {
+  width: 20px;
+  height: 20px;
+}
+
+.register-options {
+  margin-top: 25px;
+  color: #888;
+  text-align: center;
+}
+
+.register-options p {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.social-login {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  color: #000;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.google-btn:hover {
+  background-color: #adadad;
+  color: white;
+}
+
+.google-btn img {
+  height: 20px;
+  width: 20px;
+}
+
+.divider-text {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #bbb;
+  font-size: 0.9rem;
+  margin: 25px 0 15px;
+}
+
+.divider-text::before,
+.divider-text::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #444;
+  margin: 0 10px;
+}
+
+.resend-btn {
+  color: #05d8a7;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.resend-btn:hover {
+  color: #04c695;
+}
+
+.auth-btn {
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #04c695;
+  margin-top: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.resend-otp {
+  color: white;
+}
+
+.auth-btn:hover {
+  background-color: #03a57a;
+  transform: translateY(-1px);
+}
+
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Full Screen Loader */
+.fullscreen-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(4px);
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.loader-large {
+  width: 60px;
+  height: 60px;
+}
+
+.loader-content p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #374151;
+}

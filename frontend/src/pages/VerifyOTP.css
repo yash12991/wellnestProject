@@ -1,0 +1,117 @@
+.auth-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+.auth-image-section {
+  flex: 0.7;
+  position: relative;
+  padding: 2%;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 0px 18px 18px 0px;
+}
+
+.BackButton {
+  position: absolute;
+  top: 8%;
+  right: 8%;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.BackButton:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.auth-form-section {
+  flex: 1;
+  background-color: #232323;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.auth-form {
+  background-color: #313131;
+  padding: 30px 25px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.auth-form h2 {
+  color: white;
+  margin-bottom: 20px;
+  text-align: start;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.auth-form p {
+  color: #aaa;
+  margin-bottom: 20px;
+  text-align: start;
+  font-size: 0.95rem;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0 20px;
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+.auth-form input:focus {
+  border-color: #05d8a7;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #05d8a7;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.auth-btn:hover {
+  background-color: #04c695;
+}
+
+.resend-otp {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+.resend-otp a {
+  color: #05d8a7;
+  font-weight: bold;
+  text-decoration: none;
+}
+.resend-otp a:hover {
+  color: #04c695;
+}

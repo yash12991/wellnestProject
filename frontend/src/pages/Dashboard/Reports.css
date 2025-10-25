@@ -1,0 +1,23 @@
+.reports {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reports h2 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.reports ul {
+  list-style: none;
+  padding: 0;
+}
+
+.reports li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.reports li:last-child {
+  border-bottom: none;
+}
