@@ -3,6 +3,16 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Needed because __dirname is not defined in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables FIRST before any other imports
+dotenv.config({ path: path.join(__dirname, '..', '.env') });
+
 import connectDB from './src/config/db.js';
 
 // Routes
@@ -12,17 +22,6 @@ import chatRoutes from './src/routes/chat_routes.js';
 import authRoutes from './src/routes/user.routes.js';
 import ecommerceRoutes from './src/routes/ecommerce.routes.js'; // <-- new
 import productRoutes from "./src/routes/productRoutes.js";
-
-import path from "path";
-import { fileURLToPath } from "url";
-
-// Needed because __dirname is not defined in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-
-// Load environment variables
-dotenv.config();
 
 // Connect to MongoDB
 connectDB();
@@ -101,11 +100,32 @@ app.use((req, res) => {
   });
 });
 
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
 // Start server when not running as a Vercel serverless function
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 if (!process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Starting server on port ${PORT}...`);
+  const server = app.listen(PORT, () => {
+    console.log(`✅ Server is running on port ${PORT}`);
+  });
+
+  server.on('error', (err) => {
+    console.error('❌ Server error:', err);
+  });
+
+  server.on('close', () => {
+    console.log('🔒 Server closed');
   });
 }
 

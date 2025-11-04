@@ -2,8 +2,8 @@ import { Resend } from 'resend';
 import dotenv from 'dotenv';
 import { generateMealPlanPDF } from '../utils/pdfGenerator.js';
 
-// Load environment variables
-dotenv.config();
+// Environment variables should be loaded by the main application
+dotenv.config(); // Commented out - loaded in index.js
 
 // Initialize Resend with API key
 let resend = null;
