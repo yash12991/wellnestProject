@@ -1,7 +1,8 @@
 import express from 'express';
-const router = express.Router();
-const passport = require('../config/passport');
+import passport from '../config/passport.js';
 import jwt from 'jsonwebtoken';
+
+const router = express.Router();
 
 // @route   GET /v1/api/auth/google
 // @desc    Initiate Google OAuth flow

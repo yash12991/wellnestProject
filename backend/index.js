@@ -1,9 +1,4 @@
-import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import session from 'express-session';
-
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -12,10 +7,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Load environment variables FIRST before any other imports
-dotenv.config({ path: path.join(__dirname, '..', '.env') });
+dotenv.config();
+
+console.log('🔧 Environment variables loaded');
+console.log('📍 GOOGLE_CLIENT_ID exists:', !!process.env.GOOGLE_CLIENT_ID);
+
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import session from 'express-session';
 
 import connectDB from './src/config/db.js';
-const passport = require('./src/config/passport.js'); // Initialize passport config
+
+// Import passport config AFTER dotenv is configured
+const { default: passport } = await import('./src/config/passport.js');
 
 // Routes
 import mealplanRoutes from './src/routes/mealplan_routes.js';

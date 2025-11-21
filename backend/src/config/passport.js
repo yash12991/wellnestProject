@@ -1,6 +1,12 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../Models/User.models');
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { User } from '../Models/User.models.js';
+
+// Debugging: Check if env variables are loaded
+console.log('🔍 Checking environment variables in passport.js:');
+console.log('GOOGLE_CLIENT_ID:', process.env.GOOGLE_CLIENT_ID ? 'SET ✓' : 'MISSING ✗');
+console.log('GOOGLE_CLIENT_SECRET:', process.env.GOOGLE_CLIENT_SECRET ? 'SET ✓' : 'MISSING ✗');
+console.log('GOOGLE_CALLBACK_URL:', process.env.GOOGLE_CALLBACK_URL || 'NOT SET (will use default)');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -16,6 +22,12 @@ passport.deserializeUser(async (id, done) => {
 });
 
 // Google OAuth Strategy
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  console.error('❌ ERROR: GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET must be set in .env file');
+  console.error('❌ Please check your .env file in the backend directory');
+  throw new Error('Missing required Google OAuth environment variables');
+}
+
 passport.use(
   new GoogleStrategy(
     {
@@ -68,4 +80,4 @@ passport.use(
   )
 );
 
-module.exports = passport;
+export default passport;
