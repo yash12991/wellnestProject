@@ -24,7 +24,10 @@ try {
             },
             tls: {
                 rejectUnauthorized: false // For cloud deployment compatibility
-            }
+            },
+            connectionTimeout: 10000, // 10 seconds
+            greetingTimeout: 10000,
+            socketTimeout: 10000
         });
 
         // Verify transporter configuration
