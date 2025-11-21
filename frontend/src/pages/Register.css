@@ -339,3 +339,251 @@ input[type="password"] {
   font-weight: 500;
   color: #374151;
 }
+
+/* ============= MOBILE RESPONSIVENESS ============= */
+
+/* Tablets and smaller screens */
+@media (max-width: 1024px) {
+  .register-image-section {
+    flex: 0.6;
+  }
+  
+  .register-form-section {
+    flex: 1;
+  }
+  
+  .lg {
+    width: 180px;
+  }
+  
+  .BackButton {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .register-image-section {
+    flex: none;
+    min-height: 200px;
+    padding: 1rem;
+    background-size: cover;
+    border-radius: 0;
+  }
+  
+  .register-image-text h1 {
+    font-size: 1.8rem;
+    top: 5%;
+    left: 5%;
+  }
+  
+  .register-image-text h2 {
+    font-size: 1.2rem;
+    bottom: 5%;
+    left: 5%;
+    width: 85%;
+  }
+  
+  .lg {
+    width: 140px;
+  }
+  
+  .BackButton {
+    top: 1rem;
+    right: 1rem;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .register-form-section {
+    padding: 1.5rem 1rem;
+    min-height: calc(100vh - 200px);
+  }
+  
+  .register-form {
+    padding: 30px 20px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .register-form h2 {
+    font-size: 1.6rem;
+  }
+  
+  .register-form p {
+    font-size: 0.9rem;
+  }
+  
+  .register-form input,
+  .otp-input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .create-account-btn,
+  .google-login-btn,
+  .auth-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .otp-section h3 {
+    font-size: 1.4rem;
+  }
+  
+  .otp-section p {
+    font-size: 0.9rem;
+  }
+  
+  .otp-inputs {
+    gap: 8px;
+  }
+  
+  .loader-content {
+    padding: 30px 20px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .register-image-section {
+    min-height: 180px;
+  }
+  
+  .lg {
+    width: 120px;
+  }
+  
+  .BackButton {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .register-form {
+    padding: 25px 15px;
+  }
+  
+  .register-form h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  
+  .register-form p {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  
+  .register-form input,
+  .otp-input {
+    padding: 9px;
+    font-size: 13px;
+    margin: 8px 0;
+  }
+  
+  .create-account-btn,
+  .google-login-btn,
+  .auth-btn {
+    padding: 11px;
+    font-size: 14px;
+  }
+  
+  .or-divider {
+    margin: 15px 0;
+    font-size: 13px;
+  }
+  
+  .google-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .otp-section {
+    padding: 30px 20px;
+  }
+  
+  .otp-section h3 {
+    font-size: 1.3rem;
+  }
+  
+  .otp-section p {
+    font-size: 0.85rem;
+  }
+  
+  .otp-inputs {
+    gap: 6px;
+  }
+  
+  .otp-input {
+    width: 45px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+  
+  .otp-message {
+    font-size: 0.8rem;
+  }
+  
+  .otp-footer {
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+  
+  .resend-btn {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  
+  .register-loading {
+    gap: 6px;
+  }
+  
+  .loader-btn {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .loader-content {
+    padding: 25px 15px;
+  }
+  
+  .loader-large {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loader-content p {
+    font-size: 1rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .register-form {
+    padding: 20px 12px;
+  }
+  
+  .register-form h2 {
+    font-size: 1.3rem;
+  }
+  
+  .lg {
+    width: 100px;
+  }
+  
+  .otp-input {
+    width: 40px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+  
+  .otp-inputs {
+    gap: 4px;
+  }
+}

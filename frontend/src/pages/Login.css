@@ -422,3 +422,215 @@ html {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
 }
+
+/* ============= MOBILE RESPONSIVENESS ============= */
+
+/* Tablets and smaller screens */
+@media (max-width: 1024px) {
+  .login-image-section {
+    flex: 0.6;
+  }
+  
+  .login-form-section {
+    flex: 1;
+  }
+  
+  .lg {
+    width: 180px;
+  }
+  
+  .BackButton {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .login-image-section {
+    flex: none;
+    min-height: 200px;
+    padding: 1rem;
+    background-size: cover;
+  }
+  
+  .login-image-text h1 {
+    font-size: 1.8rem;
+    top: 5%;
+    left: 5%;
+  }
+  
+  .login-image-text h2 {
+    font-size: 1.2rem;
+    bottom: 5%;
+    left: 5%;
+    width: 85%;
+  }
+  
+  .lg {
+    width: 140px;
+    top: 1rem;
+    left: 1rem;
+  }
+  
+  .BackButton {
+    top: 1rem;
+    right: 1rem;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .login-form-section {
+    padding: 1.5rem 1rem;
+    min-height: calc(100vh - 200px);
+  }
+  
+  .login-form {
+    padding: 30px 20px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .login-form h2 {
+    font-size: 1.6rem;
+  }
+  
+  .login-form p {
+    font-size: 0.9rem;
+  }
+  
+  .login-form input[type="email"],
+  .login-form input[type="password"] {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .create-account-btn,
+  .google-login-btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .modal-card {
+    width: 95%;
+    padding: 20px;
+  }
+  
+  .modal-card h3 {
+    font-size: 1.3rem;
+  }
+  
+  .loader-content {
+    padding: 30px 20px;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .login-image-section {
+    min-height: 180px;
+  }
+  
+  .lg {
+    width: 120px;
+  }
+  
+  .BackButton {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .login-form {
+    padding: 25px 15px;
+  }
+  
+  .login-form h2 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+  
+  .login-form p {
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  
+  .login-form input[type="email"],
+  .login-form input[type="password"] {
+    padding: 9px;
+    font-size: 13px;
+    margin: 8px 0;
+  }
+  
+  .create-account-btn,
+  .google-login-btn {
+    padding: 11px;
+    font-size: 14px;
+  }
+  
+  .or-divider {
+    margin: 15px 0;
+    font-size: 13px;
+  }
+  
+  .google-icon {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  
+  .modal-card {
+    padding: 18px;
+  }
+  
+  .modal-card h3 {
+    font-size: 1.2rem;
+  }
+  
+  .modal-card p {
+    font-size: 0.9rem;
+  }
+  
+  .modal-card input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 9px 16px;
+    font-size: 14px;
+  }
+  
+  .loader-content {
+    padding: 25px 15px;
+  }
+  
+  .loader-large {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .loader-content p {
+    font-size: 1rem;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .login-form {
+    padding: 20px 12px;
+  }
+  
+  .login-form h2 {
+    font-size: 1.3rem;
+  }
+  
+  .lg {
+    width: 100px;
+  }
+}
