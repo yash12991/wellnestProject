@@ -228,6 +228,21 @@ function Login() {
               )}
             </motion.button>
           </form>
+
+          <div className="or-divider">
+            <span>OR</span>
+          </div>
+
+          <button
+            className="google-login-btn"
+            onClick={() => {
+              window.location.href = `${API_URL}/v1/api/oauth/google`;
+            }}
+            type="button"
+          >
+            <img src={Google} alt="Google" className="google-icon" />
+            Continue with Google
+          </button>
           <div style={{ marginTop: 12, textAlign: 'right' }}>
             <button className="link-button" onClick={() => setShowForgot(true)}>
               Forgot password?

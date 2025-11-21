@@ -157,6 +157,58 @@ html {
   height: 20px;
 }
 
+/* OR Divider */
+.or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+}
+
+.or-divider span {
+  padding: 0 15px;
+  font-weight: 500;
+}
+
+/* Google Login Button */
+.google-login-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.google-login-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #bbb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.google-login-btn .google-icon {
+  width: 20px;
+  height: 20px;
+}
+
 /* Full Screen Loader */
 .fullscreen-loader {
   position: fixed;

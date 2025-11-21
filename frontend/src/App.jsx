@@ -31,6 +31,7 @@ import Product from "./pages/Shopping/Product";
 import Settings from "./pages/Settings";
 import Checkout from "./pages/Shopping/Checkout";
 import Orders from "./pages/Shopping/Orders";
+import OAuthCallback from "./pages/OAuthCallback";
 
 function AppContent() {
   const location = useLocation();
@@ -39,6 +40,7 @@ function AppContent() {
   const hideNavbarRoutes = [
     "/login",
     "/register",
+    "/oauth-callback",
     "/dashboard",
     "/dashboard/goals",
     "/dashboard/activity",
@@ -71,6 +73,7 @@ function AppContent() {
         <Route path="/services" element={<Services />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/oauth-callback" element={<OAuthCallback />} />
         <Route path="/support" element={<Support />} />
 
         <Route

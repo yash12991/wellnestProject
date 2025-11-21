@@ -7,7 +7,6 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import AssistantIcon from "@mui/icons-material/Assistant";
-import { BsThreeDots } from "react-icons/bs";
 import {
   IoRefresh,
   IoAdd,
@@ -722,19 +721,6 @@ Remember: You're here to support ${
     }'s wellness journey!`;
   };
 
-  const clearChat = () => {
-    setMessages([
-      {
-        id: 1,
-        text: "Hello! I'm your WellNest AI assistant. I'm here to help you with health advice, meal planning, fitness tips, and answer any wellness questions you might have. How can I assist you today?",
-        sender: "ai",
-        timestamp: new Date(),
-        typing: false,
-      },
-    ]);
-    setCurrentSuggestions([]);
-  };
-
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -803,13 +789,6 @@ Remember: You're here to support ${
               title="Start New Chat"
             >
               <IoAdd />
-            </button>
-            <button
-              className="action-btn"
-              onClick={clearChat}
-              title="Clear Current Chat"
-            >
-              <BsThreeDots />
             </button>
           </div>
         </motion.div>

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import session from 'express-session';
 
 import path from "path";
 import { fileURLToPath } from "url";
@@ -14,12 +15,14 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 import connectDB from './src/config/db.js';
+const passport = require('./src/config/passport.js'); // Initialize passport config
 
 // Routes
 import mealplanRoutes from './src/routes/mealplan_routes.js';
 import messageRoutes from './src/routes/message_routes.js';
 import chatRoutes from './src/routes/chat_routes.js';
 import authRoutes from './src/routes/user.routes.js';
+import oauthRoutes from './src/routes/auth.routes.js'; // Google OAuth routes
 import ecommerceRoutes from './src/routes/ecommerce.routes.js'; // <-- new
 import productRoutes from "./src/routes/productRoutes.js";
 
@@ -56,6 +59,23 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
+// Session middleware for passport (needed for OAuth)
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'wellnest-session-secret-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+);
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Base routes
 app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Wellnest API' });
@@ -73,6 +93,7 @@ app.use('/v1/api/mealplan', mealplanRoutes);
 app.use('/v1/api/message', messageRoutes);
 app.use('/v1/api/chat', chatRoutes);
 app.use('/v1/api/auth', authRoutes);
+app.use('/v1/api/oauth', oauthRoutes); // Google OAuth routes
 import favouritesRouter from "./src/routes/favourites.routes.js";
 app.use("/v1/api", favouritesRouter);
 import debugRouter from './src/routes/debug.routes.js';
