@@ -69,3 +69,52 @@
   font-weight: 500;
   margin-bottom: 5%;
 }
+
+/* Enhanced Mobile Responsiveness */
+@media (max-width: 768px) {
+  .support-hero-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .support-hero-content p {
+    font-size: 1.125rem;
+  }
+  
+  .FAQ .Head {
+    font-size: 2rem;
+    padding-top: 5%;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-hero-content {
+    padding: 0.75rem;
+  }
+  
+  .support-hero-content h1 {
+    font-size: 2rem;
+  }
+  
+  .support-hero-content p {
+    font-size: 1rem;
+  }
+  
+  .FAQ .Head {
+    font-size: 1.75rem;
+    padding-top: 6%;
+  }
+}
+
+@media (max-width: 360px) {
+  .support-hero-content h1 {
+    font-size: 1.75rem;
+  }
+  
+  .support-hero-content p {
+    font-size: 0.9375rem;
+  }
+  
+  .FAQ .Head {
+    font-size: 1.5rem;
+  }
+}

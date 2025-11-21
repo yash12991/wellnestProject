@@ -28,6 +28,7 @@
   backdrop-filter: blur(20px);
   background: rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  min-height: 120px;
 }
 
 .header-content {
@@ -36,12 +37,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 }
 
 .header-left {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .dashboard-title-modern {
@@ -50,6 +54,8 @@
   color: white;
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  line-height: 1.2;
+  word-wrap: break-word;
 }
 
 .dashboard-subtitle-modern {
@@ -57,6 +63,7 @@
   color: rgba(255, 255, 255, 0.8);
   margin: 0;
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .header-actions {
@@ -583,22 +590,33 @@
   
   .header-content {
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
     align-items: flex-start;
+  }
+  
+  .header-left {
+    width: 100%;
   }
   
   .dashboard-title-modern {
     font-size: 2rem;
+    line-height: 1.2;
+  }
+  
+  .dashboard-subtitle-modern {
+    font-size: 1rem;
+    margin-top: 0.5rem;
   }
   
   .header-actions {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     width: 100%;
   }
   
   .action-btn {
     justify-content: center;
+    width: 100%;
   }
   
   .metrics-grid-modern {
@@ -614,6 +632,35 @@
   .calorie-main-stats {
     flex-direction: column;
     gap: 1rem;
+  }
+  
+  .calorie-stat {
+    width: 100%;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+  }
+  
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+  
+  .stat-content {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .stat-number {
+    font-size: 1.75rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .stat-label {
+    font-size: 0.875rem !important;
+    white-space: nowrap;
   }
   
   .section-title-wrapper {
@@ -633,29 +680,152 @@
 
 @media (max-width: 480px) {
   .dashboard-title-modern {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
   
   .dashboard-subtitle-modern {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .metric-card-modern {
-    padding: 1rem;
+    padding: 0.875rem;
   }
   
   .modern-card .MuiCardContent-root {
-    padding: 1rem !important;
+    padding: 0.875rem !important;
+  }
+  
+  .calorie-stat {
+    padding: 0.625rem;
+    gap: 0.75rem;
   }
   
   .stat-icon {
-    width: 50px;
-    height: 50px;
-    font-size: 1.25rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.125rem;
   }
   
   .stat-number {
-    font-size: 1.75rem !important;
+    font-size: 1.5rem !important;
+  }
+  
+  .stat-label {
+    font-size: 0.8125rem !important;
+  }
+  
+  .section-icon-bg {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+  
+  .section-title {
+    font-size: 1rem;
+  }
+  
+  .action-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .macro-item-modern,
+  .goal-item-modern,
+  .activity-item-modern {
+    padding: 0.75rem;
+  }
+  
+  .goal-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+  
+  .target-info-modern {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .dashboard-header-modern {
+    padding: 1rem 0.75rem 0.75rem;
+  }
+  
+  .dashboard-title-modern {
+    font-size: 1.375rem;
+  }
+  
+  .dashboard-subtitle-modern {
+    font-size: 0.8125rem;
+  }
+  
+  .metrics-grid-modern {
+    padding: 0 0.75rem 0.75rem;
+    gap: 1rem;
+  }
+  
+  .dashboard-grid-modern {
+    padding: 0 0.75rem 0.75rem;
+  }
+  
+  .metric-card-modern {
+    padding: 0.75rem;
+  }
+  
+  .metric-icon-wrapper {
+    width: 40px;
+    height: 40px;
+    font-size: 1.125rem;
+  }
+  
+  .calorie-stat {
+    padding: 0.5rem;
+    gap: 0.625rem;
+  }
+  
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .stat-number {
+    font-size: 1.375rem !important;
+  }
+  
+  .stat-label {
+    font-size: 0.75rem !important;
+  }
+  
+  .section-icon-bg {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+  
+  .section-title {
+    font-size: 0.9375rem;
+  }
+  
+  .action-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+  
+  .modern-card .MuiCardContent-root {
+    padding: 0.75rem !important;
+  }
+  
+  .target-info-modern {
+    padding: 0.625rem;
+    font-size: 0.8125rem;
   }
 }
 
