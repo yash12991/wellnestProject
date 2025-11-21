@@ -7,6 +7,7 @@ import Logo from "../assets/wellnest_logo.png";
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Check authentication status
@@ -22,31 +23,77 @@ function Navbar() {
     }
   }, []);
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className="navbar">
-      <div className="nav-wrapper">
-        <Link to="/">Home</Link>
-        <Link to="/about">About Us</Link>
-
-        <div className="logo">
-          <img src={Logo} alt="WellNest Logo" />
+      <div className="nav-container">
+        {/* Logo - Always visible */}
+        <div className="logo-mobile">
+          <Link to="/" onClick={closeMenu}>
+            <img src={Logo} alt="WellNest Logo" />
+          </Link>
         </div>
 
-        <Link to="/services">Services</Link>
-        <Link to="/support">Support</Link>
+        {/* Hamburger Menu Button */}
+        <button 
+          className={`hamburger ${isMenuOpen ? 'active' : ''}`} 
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        {/* Navigation Links */}
+        <div className={`nav-wrapper ${isMenuOpen ? 'active' : ''}`}>
+          <Link to="/" onClick={closeMenu}>Home</Link>
+          <Link to="/about" onClick={closeMenu}>About Us</Link>
+
+          <div className="logo logo-desktop">
+            <img src={Logo} alt="WellNest Logo" />
+          </div>
+
+          <Link to="/services" onClick={closeMenu}>Services</Link>
+          <Link to="/support" onClick={closeMenu}>Support</Link>
+
+          {/* Login button inside menu on mobile */}
+          <div className="mobile-login">
+            {isLoggedIn ? (
+              <Link to="/dashboard" className="login-btn dashboard-btn" onClick={closeMenu}>
+                Dashboard
+              </Link>
+            ) : (
+              <Link to="/login" className="login-btn" onClick={closeMenu}>
+                Login
+              </Link>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Login Button */}
+        <div className="Login desktop-login">
+          {isLoggedIn ? (
+            <Link to="/dashboard" className="login-btn dashboard-btn">
+              Dashboard
+            </Link>
+          ) : (
+            <Link to="/login" className="login-btn">
+              Login
+            </Link>
+          )}
+        </div>
       </div>
 
-      <div className="Login">
-        {isLoggedIn ? (
-          <Link to="/dashboard" className="login-btn dashboard-btn">
-            Dashboard
-          </Link>
-        ) : (
-          <Link to="/login" className="login-btn">
-            Login
-          </Link>
-        )}
-      </div>
+      {/* Overlay for mobile menu */}
+      {isMenuOpen && <div className="menu-overlay" onClick={closeMenu}></div>}
     </nav>
   );
 }
