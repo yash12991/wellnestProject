@@ -1,7 +1,7 @@
 // API Configuration
 // Use Vite's import.meta.env in the browser. Avoid using process.env which isn't available in the browser runtime.
 const fallbackOrigin = (typeof window !== 'undefined' && window.location) ? `${window.location.protocol}//${window.location.host}` : '';
-export const API_URL = import.meta.env.VITE_API_URL || (window.__env && window.__env.VITE_API_URL) || "http://localhost:5002"||fallbackOrigin;
+export const API_URL = import.meta.env.VITE_API_URL || (window.__env && window.__env.VITE_API_URL) || "http://localhost:5000"||fallbackOrigin;
 
 // Helpful debug: show which backend URL the client will use. This will appear in the browser console.
 if (typeof window !== 'undefined' && window.console && process.env.NODE_ENV !== 'test') {
