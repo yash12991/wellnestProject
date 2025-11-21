@@ -143,7 +143,7 @@ export default function Product() {
     <div className="min-h-screen bg-gray-50">
       <Toaster richColors position="top-center" /> 
       <DashNav />
-      <div className="max-w-5xl mx-auto px-6 mt-20">
+      <div className="max-w-5xl mx-auto px-6 pt-20">
         <button
           className="mb-6 text-indigo-600 hover:underline"
           onClick={() => navigate(-1)}

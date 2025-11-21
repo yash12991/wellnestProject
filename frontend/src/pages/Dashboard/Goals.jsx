@@ -3,7 +3,7 @@ import "./Goals.css";
 import DashNav from "../../components/DashNav";
 function Goals() {
   return (
-    <div className="goals">
+    <div className="goals pt-20">
       <DashNav />
       <h2>Your Goals</h2>
       <ul>

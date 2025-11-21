@@ -80,7 +80,7 @@ export default function Orders() {
   return (
     <div className="min-h-screen bg-gray-50">
       <DashNav />
-      <div className="max-w-5xl mx-auto p-6 space-y-8">
+      <div className="max-w-5xl mx-auto p-6 space-y-8 pt-20">
         <h1 className="text-3xl font-bold mb-6 text-gray-900">My Orders</h1>
 
         {orders.map((order) => {

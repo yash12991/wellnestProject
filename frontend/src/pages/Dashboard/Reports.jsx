@@ -212,7 +212,7 @@ const Reports = () => {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-16 px-6"
+        className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-16 px-6 mt-16"
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-3 mb-4">

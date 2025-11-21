@@ -28,9 +28,10 @@
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.192);
   border-radius: 18px;
-  padding: 0 20px;
+  padding: 0 30px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  gap: 15px;
 }
 
 .nav-wrapper a {
@@ -40,9 +41,10 @@
   font-family: "Poppins", sans-serif;
   font-size: 17px;
   letter-spacing: 1.5px;
-  padding: 10px 12px;
+  padding: 10px 15px;
   border-radius: 10px;
   transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 .nav-wrapper a:hover {
@@ -158,7 +160,9 @@
 /* Tablets and smaller screens */
 @media (max-width: 1024px) {
   .nav-wrapper {
-    width: 60%;
+    width: 65%;
+    padding: 0 25px;
+    gap: 10px;
   }
   
   .nav-wrapper a {

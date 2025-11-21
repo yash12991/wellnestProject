@@ -1170,9 +1170,9 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-purple-50/30 font-inter">
       <DashNav />
-      <main className="relative z-10 px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3 space-y-12">
+      <main className="relative z-10 px-4 sm:px-6 lg:px-8 py-12 pt-20 mt-16">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="lg:col-span-3 space-y-8 lg:space-y-12">
             {/* Modern Welcome Section */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 relative bg-gradient-to-br from-white via-white to-purple-50/30 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-purple-200/20 border border-purple-100/50 overflow-hidden group hover:shadow-3xl hover:shadow-purple-300/30 transition-all duration-500">
@@ -1583,8 +1583,10 @@ function Dashboard() {
           </div>
 
           {/* Sidebar */}
-          <div className="fixed top-14 mt-6 right-16 w-full lg:w-80 lg:left-auto lg:top-14 lg:col-span-1 p-4 overflow-y-auto h-[calc(100vh-3.5rem)]">
-            <MetricsDashboard userMetrics={user} />
+          <div className="hidden lg:block lg:col-span-1">
+            <div className="sticky top-20">
+              <MetricsDashboard userMetrics={user} />
+            </div>
           </div>
         </div>
       </main>

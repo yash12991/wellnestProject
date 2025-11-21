@@ -4,7 +4,7 @@ import DashNav from "../../components/DashNav";
 
 function Activity() {
   return (
-    <div className="activity">
+    <div className="activity pt-20">
       <DashNav />
       <h2>Recent Activity</h2>
       <ul>

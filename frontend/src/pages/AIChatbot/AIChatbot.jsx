@@ -724,11 +724,9 @@ Remember: You're here to support ${
   const copyToClipboard = async (text) => {
     try {
       await navigator.clipboard.writeText(text);
-      // You could add a toast notification here
       console.log('Text copied to clipboard');
     } catch (err) {
       console.error('Failed to copy text: ', err);
-      // Fallback for older browsers
       const textArea = document.createElement('textarea');
       textArea.value = text;
       document.body.appendChild(textArea);
@@ -746,7 +744,7 @@ Remember: You're here to support ${
   };
 
   return (
-    <div className="ai-chatbot-container">
+    <div className="ai-chatbot-container pt-16">
       <DashNav />
 
       {/* Main Chat Container */}

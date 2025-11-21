@@ -125,6 +125,27 @@ const generatePersonalizedTips = (mealPlan, totalCalories) => {
     title: "Smart Snack Choices",
     content: "If you need snacks, choose nuts, fruits, Greek yogurt, or vegetables with hummus. Avoid processed snacks that can derail your nutrition goals."
   });
+  
+  tips.push({
+    icon: "🏃",
+    category: "Physical Activity",
+    title: "Move More Daily",
+    content: "Pair your nutrition plan with at least 30 minutes of physical activity daily. Even a brisk walk can significantly improve your results and overall health."
+  });
+  
+  tips.push({
+    icon: "😴",
+    category: "Sleep Quality",
+    title: "Rest & Recovery",
+    content: "Aim for 7-9 hours of quality sleep each night. Good sleep supports metabolism, reduces cravings, and helps your body recover from workouts."
+  });
+  
+  tips.push({
+    icon: "📊",
+    category: "Progress Tracking",
+    title: "Monitor Your Journey",
+    content: "Take weekly measurements and photos to track progress. Focus on how you feel, not just the scale. Celebrate small wins along the way!"
+  });
 
   return tips;
 };
@@ -154,17 +175,17 @@ export const generateMealPlanHTML = (username, mealPlan) => {
         <td class="meal-cell">
           <div class="meal-name">${dayData.breakfast?.dish || 'No meal planned'}</div>
           ${dayData.breakfast?.calories ? `<div class="calories">${dayData.breakfast.calories} kcal</div>` : ''}
-          ${dayData.breakfast?.recipe ? `<div class="recipe">${dayData.breakfast.recipe.substring(0, 100)}...</div>` : ''}
+          ${dayData.breakfast?.recipe ? `<div class="recipe-full">${dayData.breakfast.recipe}</div>` : ''}
         </td>
         <td class="meal-cell">
           <div class="meal-name">${dayData.lunch?.dish || 'No meal planned'}</div>
           ${dayData.lunch?.calories ? `<div class="calories">${dayData.lunch.calories} kcal</div>` : ''}
-          ${dayData.lunch?.recipe ? `<div class="recipe">${dayData.lunch.recipe.substring(0, 100)}...</div>` : ''}
+          ${dayData.lunch?.recipe ? `<div class="recipe-full">${dayData.lunch.recipe}</div>` : ''}
         </td>
         <td class="meal-cell">
           <div class="meal-name">${dayData.dinner?.dish || 'No meal planned'}</div>
           ${dayData.dinner?.calories ? `<div class="calories">${dayData.dinner.calories} kcal</div>` : ''}
-          ${dayData.dinner?.recipe ? `<div class="recipe">${dayData.dinner.recipe.substring(0, 100)}...</div>` : ''}
+          ${dayData.dinner?.recipe ? `<div class="recipe-full">${dayData.dinner.recipe}</div>` : ''}
         </td>
       </tr>
     `;
@@ -298,6 +319,17 @@ export const generateMealPlanHTML = (username, mealPlan) => {
           font-style: italic;
           line-height: 1.2;
           margin-top: 2px;
+        }
+        
+        .recipe-full {
+          color: #374151;
+          font-size: 9px;
+          line-height: 1.4;
+          margin-top: 4px;
+          padding: 4px;
+          background-color: #f9fafb;
+          border-radius: 3px;
+          border-left: 2px solid #10B981;
         }
         
         .tips {

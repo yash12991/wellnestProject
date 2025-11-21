@@ -205,3 +205,153 @@
   font-weight: 500;
   color: #374151;
 } */
+
+/* Mobile Responsive Styles for DashNav */
+@media (max-width: 1024px) {
+  header {
+    padding: 0.625rem 1rem;
+  }
+  
+  .flex.items-center.gap-10 {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Header padding adjustment */
+  header > div:first-child {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+  
+  /* Make logo smaller */
+  header h1 {
+    font-size: 1.125rem !important;
+  }
+  
+  /* Hide icon buttons on mobile */
+  header button[aria-label="Notifications"],
+  header button[aria-label="Settings"] {
+    display: none !important;
+  }
+  
+  /* Compact user section */
+  .flex.items-center.gap-3 {
+    gap: 0.5rem !important;
+  }
+  
+  /* Make user avatar smaller */
+  .w-8.h-8 {
+    width: 2rem !important;
+    height: 2rem !important;
+  }
+  
+  /* Hide user email on small screens */
+  .text-xs.text-gray-500 {
+    display: none !important;
+  }
+  
+  /* Logout button adjustments */
+  header button.bg-red-200 {
+    padding: 0.375rem 0.625rem !important;
+    font-size: 0.8125rem !important;
+  }
+  
+  /* Mobile navigation bar - hide scrollbar */
+  nav.lg\:hidden {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+    padding-bottom: 0.5rem !important;
+    padding-top: 0.25rem !important;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scroll-behavior: smooth;
+  }
+  
+  nav.lg\:hidden::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  /* Mobile nav items */
+  nav.lg\:hidden a {
+    font-size: 0.75rem !important;
+    padding: 0.375rem 0.625rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra compact header */
+  header > div:first-child {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+  
+  /* Smaller logo on very small screens */
+  header h1 {
+    font-size: 1rem !important;
+  }
+  
+  /* Hide logo circle on very small screens */
+  header > div > div > div > div:first-child {
+    width: 2rem !important;
+    height: 2rem !important;
+    font-size: 1.125rem !important;
+  }
+  
+  /* Hide username text, show only avatar */
+  .text-sm.font-semibold {
+    display: none !important;
+  }
+  
+  /* Ultra compact logout button */
+  header button.bg-red-200 span {
+    display: none !important;
+  }
+  
+  header button.bg-red-200 {
+    padding: 0.5rem !important;
+    min-width: auto !important;
+  }
+  
+  /* Mobile nav items smaller */
+  nav.lg\:hidden a {
+    font-size: 0.6875rem !important;
+    padding: 0.25rem 0.5rem !important;
+    gap: 0.25rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  /* Minimal padding for tiny screens */
+  header > div:first-child {
+    padding: 0.375rem !important;
+  }
+  
+  /* Tiny logo */
+  header h1 {
+    font-size: 0.9375rem !important;
+  }
+  
+  /* Extra compact spacing */
+  .flex.items-center.gap-3 {
+    gap: 0.25rem !important;
+  }
+  
+  /* Hide border on user profile */
+  .border.border-gray-300.rounded-full {
+    border: none !important;
+    padding-right: 0 !important;
+  }
+  
+  /* Mobile nav ultra compact */
+  nav.lg\:hidden {
+    padding: 0.25rem 0.5rem !important;
+  }
+  
+  nav.lg\:hidden a {
+    font-size: 0.625rem !important;
+    padding: 0.25rem 0.375rem !important;
+  }
+}

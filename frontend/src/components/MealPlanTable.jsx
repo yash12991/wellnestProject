@@ -238,6 +238,77 @@ const cardViewStyles = `
       padding: 1rem;
     }
   }
+
+  /* Mobile Table Responsive Styles */
+  @media (max-width: 768px) {
+    .meal-table-container {
+      overflow-x: hidden !important;
+      padding: 1rem !important;
+    }
+
+    .meal-table-wrapper {
+      display: block !important;
+      overflow-x: hidden !important;
+      width: 100% !important;
+    }
+
+    .meal-plan-table {
+      display: block !important;
+      width: 100% !important;
+      border-spacing: 0 !important;
+    }
+
+    .meal-plan-table thead {
+      display: none !important;
+    }
+
+    .meal-plan-table tbody {
+      display: block !important;
+      width: 100% !important;
+    }
+
+    .meal-plan-table tr {
+      display: block !important;
+      margin-bottom: 1.5rem !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 12px !important;
+      padding: 1rem !important;
+      background: white !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .meal-plan-table td {
+      display: block !important;
+      width: 100% !important;
+      padding: 0.75rem 0 !important;
+      border: none !important;
+    }
+
+    .meal-plan-table td:first-child {
+      font-size: 1.25rem !important;
+      font-weight: 700 !important;
+      margin-bottom: 1rem !important;
+      padding-bottom: 0.75rem !important;
+      border-bottom: 2px solid #e5e7eb !important;
+      text-align: center !important;
+    }
+
+    .mobile-meal-label {
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.5rem !important;
+      font-weight: 600 !important;
+      color: #374151 !important;
+      margin-bottom: 0.5rem !important;
+      font-size: 0.875rem !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.05em !important;
+    }
+
+    .lg\\:hidden {
+      display: flex !important;
+    }
+  }
 `;
 
 // Inject styles
@@ -1019,8 +1090,9 @@ const MealPlanTable = () => {
         // Split layout: Meal Plan (left) + Favorites (right)
         <div className="w-full flex flex-col lg:flex-row gap-6 mt-6">
           {/* Left Side: Meal Plan Table */}
-          <div className="flex-1 lg:flex-[3] overflow-x-auto bg-white rounded-2xl shadow-lg border border-gray-200">
-            <table className="min-w-full border-separate border-spacing-y-2">
+          <div className="flex-1 lg:flex-[3] meal-table-container bg-white rounded-2xl shadow-lg border border-gray-200 p-4 lg:p-0">
+            <div className="meal-table-wrapper">
+              <table className="meal-plan-table min-w-full border-separate border-spacing-y-2">
               <thead>
                 <tr className="bg-gray-100">
                   <th className="px-3 py-3 rounded-tl-2xl text-left font-bold text-gray-700 uppercase text-xs tracking-wider">
@@ -1117,6 +1189,11 @@ const MealPlanTable = () => {
 
                           return (
                             <td key={meal.key} className="px-2 py-2 align-top">
+                              {/* Mobile Label - Hidden on Desktop */}
+                              <div className="mobile-meal-label lg:hidden flex items-center gap-2">
+                                {meal.icon}
+                                {meal.key.charAt(0).toUpperCase() + meal.key.slice(1)}
+                              </div>
                               {/* Meal Card */}
                               <div className={`rounded-lg p-2 shadow-md border hover:shadow-lg transition-all duration-300 ${
                                 isCompleted 
@@ -1486,6 +1563,7 @@ const MealPlanTable = () => {
             </div>
           </div>
         </div>
+      </div>
       )}
 
       {/* AI Compare & Apply Modal */}

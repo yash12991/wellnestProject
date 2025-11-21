@@ -17,6 +17,7 @@ const MealPlanPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-50 to-purple-50/30">
       <DashNav />
       <motion.main
+        className="pt-20"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
