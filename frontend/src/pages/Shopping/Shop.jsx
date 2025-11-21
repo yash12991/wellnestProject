@@ -136,7 +136,7 @@ export default function Shop() {
         <DashNav />
       </div>
 
-      <header className="bg-white shadow-lg border-b border-gray-200 mt-16">
+      <header className="bg-white shadow-lg border-b border-gray-200 mt-[140px] sm:mt-[140px] lg:mt-20">
         <div className="px-4 sm:px-6 py-4 sm:py-5 space-y-3 sm:space-y-4">
           {/* Title */}
           <div className="flex items-center justify-between">
