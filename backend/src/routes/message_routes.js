@@ -87,6 +87,8 @@ router.get("/mealplan/:userId", async (req, res) => {
       // Detailed onboarding preferences
       activityLevel: user.preferences?.activityLevel || "Moderate",
       meatPreference: user.preferences?.meatPreference || "Any",
+      proteinVariety: user.preferences?.proteinVariety || user.preferences?.meatPreference || "Any",
+      specificDayPreferences: user.preferences?.specificDayPreferences || "None",
       goals: user.preferences?.goals || profile?.goals || "General wellness",
       cravingType: user.preferences?.cravingType || "None",
       cravingsFrequency: user.preferences?.cravingsFrequency || "Rarely",
@@ -140,7 +142,8 @@ BASIC PROFILE:
 
 DETAILED HEALTH & LIFESTYLE PREFERENCES:
 - Activity Level: ${userContext.activityLevel}
-- Meat Preference: ${userContext.meatPreference}
+- Protein Sources Available: ${Array.isArray(userContext.proteinVariety) ? userContext.proteinVariety.join(", ") : userContext.proteinVariety}
+- Day-Specific Protein Preferences: ${userContext.specificDayPreferences}
 - Primary Health Goals: ${userContext.goals}
 - Craving Type: ${userContext.cravingType}
 - Craving Frequency: ${userContext.cravingsFrequency}
@@ -155,18 +158,20 @@ RESTRICTIONS & ALLERGIES:
 - Food Allergies: ${userContext.allergies.join(", ") || "none"}
 
 PERSONALIZATION REQUIREMENTS:
-1. STRICTLY respect meat preference - if "No Meat" then provide ONLY vegetarian/vegan options
-2. Align with activity level - Higher calories and protein for "Heavy" activity, moderate for "Light"
-3. Target specific health goals - energy-boosting foods for "More energy", digestive-friendly for digestion goals
-4. Consider craving patterns - if user craves sweets/carbs, include healthier alternatives
-5. Account for digestive issues - avoid spicy/heavy foods if user has frequent digestive upset
-6. Time energy dips - provide energy-boosting meals before user's fatigue time
-7. Respect medical conditions - diabetic-friendly if diabetic, heart-healthy if cardiac issues
-8. NEVER include foods from "Foods to Avoid" list
-9. STRICTLY avoid all listed allergies
-10. Consider additional preferences for meal variety and satisfaction
-11. IMPORTANT: Create VARIETY and DIFFERENT meals each time - avoid repeating the same dishes
-12. Use diverse Indian regional cuisines and cooking methods for maximum variety
+1. PROTEIN VARIETY: Use proteins from the available list: ${Array.isArray(userContext.proteinVariety) ? userContext.proteinVariety.join(", ") : userContext.proteinVariety}
+2. DAY-SPECIFIC RULES: ${userContext.specificDayPreferences !== "None" ? `STRICTLY follow these day-specific preferences: ${userContext.specificDayPreferences}` : "Rotate proteins throughout the week for variety"}
+3. VARIETY IS KEY: DO NOT repeat the same protein source on consecutive days unless specifically requested
+4. Align with activity level - Higher calories and protein for "Heavy" activity, moderate for "Light"
+5. Target specific health goals - energy-boosting foods for "More energy", digestive-friendly for digestion goals
+6. Consider craving patterns - if user craves sweets/carbs, include healthier alternatives
+7. Account for digestive issues - avoid spicy/heavy foods if user has frequent digestive upset
+8. Time energy dips - provide energy-boosting meals before user's fatigue time
+9. Respect medical conditions - diabetic-friendly if diabetic, heart-healthy if cardiac issues
+10. NEVER include foods from "Foods to Avoid" list
+11. STRICTLY avoid all listed allergies
+12. Consider additional preferences for meal variety and satisfaction
+13. IMPORTANT: Create VARIETY and DIFFERENT meals each time - avoid repeating the same dishes
+14. Use diverse Indian regional cuisines and cooking methods for maximum variety
 
 TECHNICAL REQUIREMENTS:
 1. Output STRICT JSON with structure:

@@ -35,6 +35,7 @@ function Onboarding() {
     currentWeight: "",
     goalWeight: "",
     meatPreference: "",
+    proteinVariety: [], // NEW: Multiple protein sources
     activityLevel: "",
     fatigueTime: "",
     digestiveUpset: "",
@@ -42,8 +43,9 @@ function Onboarding() {
     cravingType: "",
     goals: "",
     preferences: "",
-    medicalConditions: "", // NEW FIELD
-    foodsToAvoid: "", // NEW FIELD
+    medicalConditions: "",
+    foodsToAvoid: "",
+    specificDayPreferences: "", // NEW: Like "No chicken on Monday, Wednesday, Friday"
   });
 
   const [step, setStep] = useState(1);
@@ -205,11 +207,20 @@ const ObButton = ({ children, onClick, disabled, primary, icon, className = "", 
     },
     {
       key: "meatPreference",
-      title: "What's Your Protein Preference?",
-      description: "Choose the proteins you'd love to see in your meal plan.",
+      title: "What Proteins Do You Prefer?",
+      description: "Select ALL proteins you're comfortable eating. You can specify day preferences in the next step.",
       icon: <Utensils size={20} className="text-gray-600" />,
-      options: ["Chicken", "Pork", "Beef", "Fish", "Bacon", "No Meat"],
-      field: "meatPreference",
+      options: ["Chicken", "Pork", "Beef", "Fish", "Eggs", "Paneer", "Tofu", "Legumes"],
+      field: "proteinVariety",
+      multiSelect: true, // NEW: Allow multiple selections
+    },
+    {
+      key: "specificDayPreferences",
+      title: "Any Day-Specific Preferences?",
+      description: "Optional: Specify which foods you want to avoid on certain days (e.g., 'No chicken on Monday and Friday', 'Fish only on weekends')",
+      icon: <AlertTriangle size={20} className="text-gray-600" />,
+      field: "specificDayPreferences",
+      inputType: "textarea",
     },
     {
       key: "activityLevel",
@@ -388,7 +399,80 @@ const ObButton = ({ children, onClick, disabled, primary, icon, className = "", 
         </div>
 
         {/* Step Content */}
-        {currentStep.options ? (
+        {currentStep.inputType === "textarea" ? (
+          <div className="space-y-8">
+            <textarea
+              value={formData[currentStep.field] || ""}
+              onChange={(e) => handleChange(currentStep.field, e.target.value)}
+              placeholder="e.g., No chicken on Monday, Wednesday, Friday. Fish only on weekends."
+              className="w-full p-4 border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none min-h-32 resize-y"
+              rows="4"
+            />
+            <div className="flex justify-between items-center pt-8 border-t border-gray-100">
+              <ObButton 
+                onClick={handleBack}
+                icon={<ArrowLeft size={16} />}
+                className="px-6 py-3"
+              >
+                Back
+              </ObButton>
+              <ObButton
+                onClick={handleNext}
+                primary
+                className="px-8 py-3"
+              >
+                Continue (Optional)
+              </ObButton>
+            </div>
+          </div>
+        ) : currentStep.multiSelect ? (
+          <div className="space-y-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {currentStep.options.map((opt) => {
+                const isSelected = Array.isArray(formData[currentStep.field]) 
+                  ? formData[currentStep.field].includes(opt)
+                  : formData[currentStep.field] === opt;
+                return (
+                  <ObButton
+                    key={opt}
+                    onClick={() => {
+                      const currentValues = Array.isArray(formData[currentStep.field]) 
+                        ? formData[currentStep.field] 
+                        : [];
+                      const newValues = isSelected
+                        ? currentValues.filter(v => v !== opt)
+                        : [...currentValues, opt];
+                      handleChange(currentStep.field, newValues);
+                    }}
+                    selected={isSelected}
+                    className="text-center py-4 px-4 text-sm"
+                  >
+                    {opt}
+                  </ObButton>
+                );
+              })}
+            </div>
+            
+            <div className="flex justify-between items-center pt-8 border-t border-gray-100">
+              <ObButton 
+                onClick={handleBack}
+                disabled={step === 1}
+                icon={<ArrowLeft size={16} />}
+                className="px-6 py-3"
+              >
+                Back
+              </ObButton>
+              <ObButton
+                onClick={handleNext}
+                primary
+                disabled={!formData[currentStep.field] || (Array.isArray(formData[currentStep.field]) && formData[currentStep.field].length === 0)}
+                className="px-8 py-3"
+              >
+                Continue
+              </ObButton>
+            </div>
+          </div>
+        ) : currentStep.options ? (
           <div className="space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {currentStep.options.map((opt) => (
