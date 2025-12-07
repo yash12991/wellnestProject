@@ -145,7 +145,7 @@ function Register() {
   };
 
   const handleGoogleLogin = () => {
-    toast.info("Google registration feature is not available.");
+    window.location.href = `${API_URL}/v1/api/oauth/google`;
   };
 
   return (
@@ -225,6 +225,21 @@ function Register() {
                   )}
                 </motion.button>
               </form>
+
+              <div className="or-divider">
+                <span>OR</span>
+              </div>
+
+              <button
+                className="google-login-btn"
+                onClick={() => {
+                  window.location.href = `${API_URL}/v1/api/oauth/google`;
+                }}
+                type="button"
+              >
+                <img src={Google} alt="Google" className="google-icon" />
+                Continue with Google
+              </button>
             </>
           ) : (
             <>
