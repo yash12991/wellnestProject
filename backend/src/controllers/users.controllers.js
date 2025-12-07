@@ -89,7 +89,7 @@ const register = async (req, res) => {
       await User.findByIdAndDelete(user._id);
       return res.status(500).json({
         success: false,
-        message: "Failed to send verification email. Please try again."
+        message: "Failed to send verification email. Please try again or use google signup."
       });
     }
 
