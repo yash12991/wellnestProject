@@ -35,7 +35,11 @@ const Settings = () => {
     preferences: {},
     age: '',
     medicalConditions: '',
-    foodsToAvoid: ''
+    foodsToAvoid: '',
+    proteinVariety: [],
+    specificDayPreferences: '',
+    goals: '',
+    generalPreferences: ''
   });
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
@@ -100,9 +104,13 @@ const Settings = () => {
           goalWeight: data.user.goalWeight || "",
           foodAllergies: data.user.foodAllergies || [],
           preferences: data.user.preferences || {},
-          age: data.user.profile?.age || '',
+          age: data.user.profile?.age || data.user.age || '',
           medicalConditions: data.user.preferences?.medicalConditions || '',
-          foodsToAvoid: data.user.preferences?.foodsToAvoid || ''
+          foodsToAvoid: data.user.preferences?.foodsToAvoid || '',
+          proteinVariety: data.user.preferences?.proteinVariety || [],
+          specificDayPreferences: data.user.preferences?.specificDayPreferences || '',
+          goals: data.user.preferences?.goals || '',
+          generalPreferences: data.user.preferences?.preferences || ''
         });
       }
     } catch (error) {
@@ -153,7 +161,7 @@ const Settings = () => {
   const handlePrefChange = (e) => {
     const { name, value } = e.target;
     // If top-level fields
-    if (name === 'age' || name === 'medicalConditions' || name === 'foodsToAvoid') {
+    if (['age', 'medicalConditions', 'foodsToAvoid', 'proteinVariety', 'specificDayPreferences', 'goals', 'generalPreferences'].includes(name)) {
       setFormData((prev) => ({ ...prev, [name]: value }));
       return;
     }
@@ -167,10 +175,41 @@ const Settings = () => {
     }));
   };
 
+  const handleProteinVarietyChange = (protein) => {
+    setFormData((prev) => {
+      const currentProteins = Array.isArray(prev.proteinVariety) ? prev.proteinVariety : [];
+      const newProteins = currentProteins.includes(protein)
+        ? currentProteins.filter(p => p !== protein)
+        : [...currentProteins, protein];
+      return { ...prev, proteinVariety: newProteins };
+    });
+  };
+
   const updateProfile = async () => {
     setSaving(true);
     try {
       const token = localStorage.getItem("accessToken");
+
+      // Structure the data to match backend expectations
+      const payload = {
+        username: formData.username,
+        email: formData.email,
+        gender: formData.gender,
+        height: formData.height,
+        currentWeight: formData.currentWeight,
+        goalWeight: formData.goalWeight,
+        foodAllergies: formData.foodAllergies,
+        age: formData.age,
+        medicalConditions: formData.medicalConditions,
+        foodsToAvoid: formData.foodsToAvoid,
+        preferences: {
+          ...formData.preferences,
+          proteinVariety: formData.proteinVariety,
+          specificDayPreferences: formData.specificDayPreferences,
+          goals: formData.goals,
+          preferences: formData.generalPreferences, // This is the general food preferences text
+        }
+      };
 
       const response = await fetch(API_ENDPOINTS.AUTH.UPDATE_PROFILE, {
         method: "PATCH",
@@ -178,7 +217,7 @@ const Settings = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -295,9 +334,13 @@ const Settings = () => {
         goalWeight: user?.goalWeight || "",
         foodAllergies: user?.foodAllergies || [],
         preferences: user?.preferences || {},
-        age: user?.profile?.age || '',
+        age: user?.profile?.age || user?.age || '',
         medicalConditions: user?.preferences?.medicalConditions || '',
-        foodsToAvoid: user?.preferences?.foodsToAvoid || ''
+        foodsToAvoid: user?.preferences?.foodsToAvoid || '',
+        proteinVariety: user?.preferences?.proteinVariety || [],
+        specificDayPreferences: user?.preferences?.specificDayPreferences || '',
+        goals: user?.preferences?.goals || '',
+        generalPreferences: user?.preferences?.preferences || ''
       });
     } else if (type === "password") {
       setPasswordData({
@@ -643,7 +686,83 @@ const Settings = () => {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Health Goals</label>
+                <select
+                  name="goals"
+                  value={formData.goals}
+                  onChange={handlePrefChange}
+                  disabled={!editMode.profile}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50"
+                >
+                  <option value="">Select Goal</option>
+                  <option value="More energy">More energy</option>
+                  <option value="Better sleep">Better sleep</option>
+                  <option value="Weight gain">Weight gain</option>
+                  <option value="Weight loss">Weight loss</option>
+                  <option value="Become lean and toned">Become lean and toned</option>
+                  <option value="Improve digestion">Improve digestion</option>
+                  <option value="Improve metabolism">Improve metabolism</option>
+                </select>
+              </div>
             </div>
+
+            {/* Protein Variety Multi-Select */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Protein Variety (Select All That Apply)</label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                {['Chicken', 'Pork', 'Beef', 'Fish', 'Eggs', 'Paneer', 'Tofu', 'Legumes'].map((protein) => {
+                  const isSelected = Array.isArray(formData.proteinVariety) && formData.proteinVariety.includes(protein);
+                  return (
+                    <button
+                      key={protein}
+                      type="button"
+                      onClick={() => handleProteinVarietyChange(protein)}
+                      disabled={!editMode.profile}
+                      className={`px-3 py-2 rounded-lg border transition-colors ${
+                        isSelected
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-white text-gray-700 border-gray-300 hover:border-blue-500'
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    >
+                      {protein}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Day-Specific Preferences */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Day-Specific Preferences (Optional)</label>
+              <textarea
+                name="specificDayPreferences"
+                style={{ color: "black", background: "white" }}
+                value={formData.specificDayPreferences}
+                onChange={handlePrefChange}
+                disabled={!editMode.profile}
+                placeholder="e.g., No chicken on Monday and Friday, Fish only on weekends"
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 resize-none"
+              />
+            </div>
+
+            {/* General Food Preferences */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">General Food Preferences</label>
+              <textarea
+                name="generalPreferences"
+                style={{ color: "black", background: "white" }}
+                value={formData.generalPreferences}
+                onChange={handlePrefChange}
+                disabled={!editMode.profile}
+                placeholder="Tell us about your dietary preferences or lifestyle choices"
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 resize-none"
+              />
+            </div>
+          </div>
           </div>
         </div>
 
