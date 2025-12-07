@@ -590,11 +590,11 @@ const MealPlanTable = () => {
       if (isFavorite) {
         // ✅ DELETE request to remove favourite (with encodeURIComponent to avoid dish name issues)
         await axios.delete(
-          `/v1/api/${userId}/favourites/${encodeURIComponent(mealData.dish)}`
+          `${API_URL}/v1/api/${userId}/favourites/${encodeURIComponent(mealData.dish)}`
         );
       } else {
         // ✅ POST request to add favourite
-        await axios.post(`/v1/api/${userId}/favourites`, {
+        await axios.post(`${API_URL}/v1/api/${userId}/favourites`, {
           dishName: mealData.dish,
           calories: mealData.calories,
           recipe: mealData.recipe,
