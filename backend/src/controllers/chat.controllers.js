@@ -611,7 +611,7 @@ Just tell me what you're craving, and I'll give you a detailed recipe with:
         console.log('🎯 Extracted food item:', foodItem);
 
         // Generate detailed recipe using Gemini
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
         
         const recipePrompt = `As a professional chef and nutrition expert, provide a comprehensive recipe for "${foodItem}". 
 
@@ -793,7 +793,7 @@ I can provide more specific guidance based on your cooking level and preferences
     }
 
     // Regular AI response generation
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     
     // Enhanced system prompt for meal-aware conversations
     let enhancedSystemPrompt = systemPrompt ? 
@@ -882,7 +882,7 @@ Always be helpful, encouraging, and focus on making healthy eating enjoyable!` :
     return {
       text: text.trim(),
       suggestions,
-      model: 'gemini-2.0-flash',
+      model: 'gemini-2.5-flash',
       timestamp: new Date()
     };
     
@@ -2073,7 +2073,7 @@ const getDetailedRecipe = async (req, res) => {
       throw new Error('Google AI not initialized - GOOGLE_API_KEY missing');
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     
     let dietaryNote = '';
     if (dietaryRestrictions && dietaryRestrictions.length > 0) {
@@ -2206,7 +2206,7 @@ const getRecipeSuggestions = async (req, res) => {
       throw new Error('Google AI not initialized - GOOGLE_API_KEY missing');
     }
 
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
     
     let filters = '';
     if (cuisine) filters += `Cuisine: ${cuisine}\n`;

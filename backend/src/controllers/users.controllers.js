@@ -446,7 +446,8 @@ const completeOnboarding = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
+      // Don't set domain for cross-domain requests - browser will handle it
+      // domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
       path: "/",
     };
 
@@ -548,7 +549,8 @@ const login = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
+      // Don't set domain for cross-domain requests - browser will handle it
+      // domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
       path: "/",
     };
 

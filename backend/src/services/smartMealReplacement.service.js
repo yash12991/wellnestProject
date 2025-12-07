@@ -55,7 +55,7 @@ class SmartMealReplacementService {
   }
 
   // Helper: generate content with retries and fallback models
-  async _generateWithRetries(prompt, modelNames = [ 'gemini-2.0-flash', 'gemini-2.0-flash-exp', 'gemini-2.0-flash-exp'], maxRetries = 3) {
+  async _generateWithRetries(prompt, modelNames = [ 'gemini-2.5-flash', 'gemini-2.5-flash-exp', 'gemini-2.5-flash-exp'], maxRetries = 3) {
     if (!this.geminiAI) throw new Error('AI client not initialized');
 
     let lastErr = null;
@@ -341,7 +341,7 @@ class SmartMealReplacementService {
   // Request multiple diverse alternatives and ask for different cuisines / macros
   const enhancedPrompt = prompt + `\n\nIMPORTANT: Return exactly 3 diverse replacement objects in the "replacements" array. Ensure the three options are meaningfully different (different cuisines, different primary protein or plant base, or different cooking methods). Avoid near-duplicates.`;
 
-  const response = await this._generateWithRetries(enhancedPrompt, [ 'gemini-2.0-flash', 'gemini-2.0-flash-exp']);
+  const response = await this._generateWithRetries(enhancedPrompt, [ 'gemini-2.5-flash', 'gemini-2.5-flash-exp']);
       const parsed = this._parseAIJSON(response);
       if (parsed) {
         // Post-filter the replacements for diversity
@@ -376,7 +376,7 @@ class SmartMealReplacementService {
   async modifyMeal(currentMeal, modificationRequest, userPreferences) {
     try {
       if (!this.geminiAI) throw new Error('AI client not initialized');
-      const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const prompt = `
         You are an AI chef helping modify meals based on user requests.
@@ -428,7 +428,7 @@ class SmartMealReplacementService {
         }
       `;
 
-  const response = await this._generateWithRetries(prompt, [  'gemini-2.0-flash', 'gemini-2.0-flash-exp']);
+  const response = await this._generateWithRetries(prompt, [  'gemini-2.5-flash', 'gemini-2.5-flash-exp']);
   const parsed = this._parseAIJSON(response);
       if (parsed) return parsed;
 
@@ -446,7 +446,7 @@ class SmartMealReplacementService {
   async suggestIngredientSubstitutions(dislikedIngredients, currentRecipe, nutritionalGoals) {
     try {
       if (!this.geminiAI) throw new Error('AI client not initialized');
-      const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const prompt = `
         Help find smart ingredient substitutions that maintain nutritional value.
@@ -491,7 +491,7 @@ class SmartMealReplacementService {
         }
       `;
 
-  const response = await this._generateWithRetries(prompt, [ 'gemini-2.0-flash', 'gemini-2.0-flash-exp']);
+  const response = await this._generateWithRetries(prompt, [ 'gemini-2.5-flash', 'gemini-2.5-flash-exp']);
   const parsed = this._parseAIJSON(response);
       if (parsed) return parsed;
 
@@ -509,7 +509,7 @@ class SmartMealReplacementService {
   async getContextualMealSuggestions(userContext) {
     try {
       if (!this.geminiAI) throw new Error('AI client not initialized');
-      const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
       const prompt = `
         Suggest meals based on user's current situation and preferences.
@@ -549,7 +549,7 @@ class SmartMealReplacementService {
         }
       `;
 
-  const response = await this._generateWithRetries(prompt, [ 'gemini-2.0-flash', 'gemini-2.0-flash-exp']);
+  const response = await this._generateWithRetries(prompt, [ 'gemini-2.5-flash', 'gemini-2.5-flash-exp']);
   const parsed = this._parseAIJSON(response);
       if (parsed) return parsed;
 

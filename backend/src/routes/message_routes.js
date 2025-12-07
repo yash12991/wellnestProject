@@ -195,7 +195,7 @@ TECHNICAL REQUIREMENTS:
     };
 
     // Call Gemini
-    const model = ai.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
     const result = await model.generateContent(generatePayload);
     const aiText = await result.response.text();
 
