@@ -763,7 +763,6 @@ const Settings = () => {
               />
             </div>
           </div>
-          </div>
         </div>
 
         {/* Password Settings */}
