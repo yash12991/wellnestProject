@@ -20,9 +20,10 @@ Type: A     | Name: @    | Value: 76.76.21.21
 1. Go to https://vercel.com/dashboard
 2. Select your project → Settings → Domains
 3. Add: `www.wellnest.sbs` and `wellnest.sbs`
-4. Go to Settings → Environment Variables
-5. Set: `VITE_API_URL` = `https://api.wellnest.sbs`
-6. Redeploy from Deployments tab
+4. **IMPORTANT**: Click the ⋮ menu next to `www.wellnest.sbs` → **"Set as Primary Domain"**
+5. Go to Settings → Environment Variables
+6. Set: `VITE_API_URL` = `https://api.wellnest.sbs`
+7. Redeploy from Deployments tab
 
 ---
 
