@@ -82,7 +82,7 @@ function Onboarding() {
         "height",
         "currentWeight",
         "goalWeight",
-        "meatPreference",
+        "proteinVariety", // Changed from meatPreference to match the actual field name
         "activityLevel",
         "fatigueTime",
         "digestiveUpset",
@@ -91,8 +91,17 @@ function Onboarding() {
         "goals",
         "preferences",
       ];
-      const missing = requiredFields.filter((f) => !formData[f]);
+      const missing = requiredFields.filter((f) => {
+        const value = formData[f];
+        // For arrays (like proteinVariety), check if it has at least one item
+        if (Array.isArray(value)) {
+          return value.length === 0;
+        }
+        // For other fields, check if they're truthy
+        return !value;
+      });
       if (missing.length > 0) {
+        console.log('Missing fields:', missing);
         showToast(
           "Please fill all fields before finishing onboarding.",
           "error"
