@@ -61,8 +61,20 @@ passport.use(
 
         // Create new user with Google account
         console.log('✨ Creating new user with Google OAuth');
+        
+        // Generate a unique username to avoid duplicates
+        let baseUsername = profile.displayName || profile.emails[0].value.split('@')[0];
+        let username = baseUsername;
+        let counter = 1;
+        
+        // Check if username exists and add counter if needed
+        while (await User.findOne({ username })) {
+          username = `${baseUsername}${counter}`;
+          counter++;
+        }
+        
         user = await User.create({
-          username: profile.displayName || profile.emails[0].value.split('@')[0],
+          username,
           email: profile.emails[0].value,
           googleId: profile.id,
           isVerified: true, // Auto-verify OAuth users
@@ -70,7 +82,7 @@ passport.use(
           profilePicture: profile.photos[0]?.value || '',
         });
 
-        console.log('✅ New Google user created:', user.email);
+        console.log('✅ New Google user created:', user.email, 'with username:', username);
         return done(null, user);
       } catch (error) {
         console.error('❌ Error in Google OAuth strategy:', error);
