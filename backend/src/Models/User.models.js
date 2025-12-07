@@ -80,6 +80,8 @@ const userSchema = new mongoose.Schema({
       type: String,
       enum: ["Chicken", "Pork", "Beef", "Fish", "Bacon", "No Meat"],
     },
+    proteinVariety: [{ type: String }], // Array of proteins user can eat: Chicken, Pork, Beef, Fish, Eggs, Paneer, Tofu, Legumes
+    specificDayPreferences: { type: String }, // Day-specific rules like "No chicken on Monday, Fish only on weekends"
     activityLevel: {
       type: String,
       enum: ["Inactive", "Light", "Moderate", "Heavy"],
@@ -112,9 +114,10 @@ const userSchema = new mongoose.Schema({
         "Improve metabolism",
       ],
     },
-    otherPreferences: { type: String }, // free text preferences
+    preferences: { type: String }, // General food preferences/lifestyle choices (free text)
+    otherPreferences: { type: String }, // Additional free text preferences
 
-    // NEW ADDITIONS
+    // Health-related fields
     medicalConditions: { type: String }, // allergic, diabetic, etc.
     foodsToAvoid: { type: String }, // e.g., fried foods, gluten
   },

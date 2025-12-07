@@ -334,6 +334,8 @@ const completeOnboarding = async (req, res) => {
       preferences,  // Object with diet/activity preferences
       // Extra onboarding fields from frontend
       meatPreference,
+      proteinVariety,  // NEW: Array of proteins user can eat
+      specificDayPreferences,  // NEW: Day-specific protein rules
       activityLevel,
       fatigueTime,
       digestiveUpset,
@@ -408,6 +410,8 @@ const completeOnboarding = async (req, res) => {
       ...existingPrefs,
       ...(preferences || {}),
       meatPreference: meatPreference || existingPrefs.meatPreference,
+      proteinVariety: proteinVariety || existingPrefs.proteinVariety || [],
+      specificDayPreferences: specificDayPreferences || existingPrefs.specificDayPreferences || '',
       activityLevel: activityLevel || existingPrefs.activityLevel,
       fatigueTime: fatigueTime || existingPrefs.fatigueTime,
       digestiveUpset: digestiveUpset || existingPrefs.digestiveUpset,
