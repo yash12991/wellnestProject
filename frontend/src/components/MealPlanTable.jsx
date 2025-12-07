@@ -345,7 +345,7 @@ const fetchCompletedMeals = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("accessToken");
     if (!user?._id || !token) return [];
-    const res = await fetch(`/v1/api/mealplan/${user._id}/completed-meals`, {
+    const res = await fetch(`${API_URL}/v1/api/mealplan/${user._id}/completed-meals`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (!res.ok) return [];
@@ -480,7 +480,7 @@ const MealPlanTable = () => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const res = await axios.get(`/v1/api/${userId}/favourites`);
+        const res = await axios.get(`${API_URL}/v1/api/${userId}/favourites`);
         const favDishNames = res.data.favourites.map((f) => f.dishName);
 
         // Map dish names to mealIds by scanning the meal plan
@@ -533,7 +533,7 @@ const MealPlanTable = () => {
       setTimeout(() => {
         const fetchFavorites = async () => {
           try {
-            const res = await axios.get(`/v1/api/${user._id}/favourites`);
+            const res = await axios.get(`${API_URL}/v1/api/${user._id}/favourites`);
             const favDishNames = res.data.favourites.map((f) => f.dishName);
             const favMealIds = new Set();
             week.forEach((dayEntry) => {

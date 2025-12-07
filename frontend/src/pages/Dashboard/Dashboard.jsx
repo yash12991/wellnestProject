@@ -855,7 +855,7 @@ function Dashboard() {
       const token = localStorage.getItem("accessToken");
       if (!storedUser?._id || !token) return [];
 
-      const res = await fetch(`/v1/api/mealplan/${storedUser._id}/dailyCalories`, {
+      const res = await fetch(`${API_URL}/v1/api/mealplan/${storedUser._id}/dailyCalories`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
@@ -876,7 +876,7 @@ function Dashboard() {
       
       // Fetch completed meals, meal plan, and daily calories in parallel
       const [completedRes, mealPlanRes, dailyCaloriesData] = await Promise.all([
-        fetch(`/v1/api/mealplan/${storedUser._id}/completed-meals`, {
+        fetch(`${API_URL}/v1/api/mealplan/${storedUser._id}/completed-meals`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch(API_ENDPOINTS.MEALPLAN.LATEST(storedUser._id), {
@@ -1058,7 +1058,7 @@ function Dashboard() {
       setTodayCompleted((prev) => new Set(prev).add(mealId));
 
       await axios.post(
-        `/v1/api/mealplan/${userId}/meal/complete`,
+        `${API_URL}/v1/api/mealplan/${userId}/meal/complete`,
         {
           day,
           mealType: mealKey,

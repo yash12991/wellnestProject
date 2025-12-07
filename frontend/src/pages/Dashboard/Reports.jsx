@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import DashNav from "../../components/DashNav.jsx";
+import { API_URL } from "../../utils/api";
 import {
   LineChart,
   Line,
@@ -51,13 +52,13 @@ const Reports = () => {
   const fetchData = async () => {
     try {
       const [caloriesRes, completedRes, favRes] = await Promise.all([
-        axios.get(`/v1/api/mealplan/${user._id}/dailyCalories`, {
+        axios.get(`${API_URL}/v1/api/mealplan/${user._id}/dailyCalories`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get(`/v1/api/mealplan/${user._id}/completed-meals`, {
+        axios.get(`${API_URL}/v1/api/mealplan/${user._id}/completed-meals`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get(`/v1/api/${user._id}/favourites`, {
+        axios.get(`${API_URL}/v1/api/${user._id}/favourites`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -69,7 +70,7 @@ const Reports = () => {
       const completedData = completedRes.data.completedMeals || [];
       const favData = favRes.data.favourites || [];
       const mealPlanRes = await axios.get(
-        `/v1/api/mealplan/latest/${user._id}`
+        `${API_URL}/v1/api/mealplan/latest/${user._id}`
       );
       setMealPlan(mealPlanRes.data.week || []);
       setDailyCalories(caloriesData);
