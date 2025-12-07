@@ -75,7 +75,7 @@ function Onboarding() {
         return;
       }
 
-      // Check required fields
+      // Check required fields (medicalConditions, foodsToAvoid, and specificDayPreferences are optional)
       const requiredFields = [
         "gender",
         "age",
@@ -90,8 +90,6 @@ function Onboarding() {
         "cravingType",
         "goals",
         "preferences",
-        "medicalConditions", // NEW REQUIRED FIELD
-        "foodsToAvoid", // NEW REQUIRED FIELD
       ];
       const missing = requiredFields.filter((f) => !formData[f]);
       if (missing.length > 0) {
