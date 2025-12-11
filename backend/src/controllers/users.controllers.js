@@ -532,19 +532,33 @@ const login = async (req, res) => {
     }
 
 
+    // Generate tokens first (needed even if onboarding incomplete)
+    const { accessToken, refreshToken } = await generateAccessTokenandRefreshToken(user._id);
+
     // Check if onboarding is complete
     if (!user.isOnboardingComplete) {
-      return res.status(200).json({
-        success: true,
-        message: "Please complete your onboarding",
-        requiresOnboarding: true,
-        userId: user._id,
-        email: user.email
-      });
+      const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: "/",
+      };
+
+      return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json({
+          success: true,
+          message: "Please complete your onboarding",
+          requiresOnboarding: true,
+          userId: user._id,
+          email: user.email,
+          accessToken,
+          refreshToken
+        });
     }
-
-
-    const { accessToken, refreshToken } = await generateAccessTokenandRefreshToken(user._id);
 
 
     const loggedInUser = await User.findById(user._id)
