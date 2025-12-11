@@ -936,9 +936,10 @@ const MealPlanTable = () => {
           </div>
         </div>
 
-        <div class="section-header">📅 Your Weekly Schedule</div>
+       
 
-        <table>
+        <table> 
+        <div class="section-header">📅 Your Weekly Schedule</div>
           <thead>
             <tr>
               <th>Day</th>
