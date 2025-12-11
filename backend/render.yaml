@@ -2,7 +2,10 @@ services:
   - type: web
     name: wellnest-backend
     env: node
-    buildCommand: npm install && npx puppeteer browsers install chrome
+    buildCommand: |
+      npm install
+      mkdir -p /opt/render/.cache/puppeteer
+      npx puppeteer browsers install chrome --path /opt/render/.cache/puppeteer
     startCommand: node index.js
     envVars:
       - key: NODE_ENV
@@ -12,4 +15,4 @@ services:
       - key: PUPPETEER_CACHE_DIR
         value: /opt/render/.cache/puppeteer
       - key: PUPPETEER_EXECUTABLE_PATH
-        sync: false
+        value: /opt/render/.cache/puppeteer/chrome/linux-141.0.7390.122/chrome-linux64/chrome

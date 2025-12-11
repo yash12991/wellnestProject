@@ -12,29 +12,31 @@ const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
 
 try {
     if (gmailAppPassword) {
-        // Use port 465 with SSL (better for cloud environments like Render)
+        // Use port 587 with STARTTLS (port 465 is blocked by many cloud providers including Render)
         transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // Use SSL
+            port: 587,
+            secure: false, // Use STARTTLS
             auth: {
                 user: gmailUser,
                 pass: gmailAppPassword
             },
             tls: {
+                ciphers: 'SSLv3',
                 rejectUnauthorized: false
             },
-            connectionTimeout: 30000, // 30 seconds
-            greetingTimeout: 10000,
+            connectionTimeout: 60000, // 60 seconds
+            greetingTimeout: 30000,
             socketTimeout: 60000,
-            logger: false,
-            debug: false
+            logger: true,
+            debug: true
         });
         
         console.log("✅ Gmail email service initialized");
         console.log(`📧 Email: ${gmailUser}`);
-        console.log(`🔐 SMTP: smtp.gmail.com:465 (SSL)`);
+        console.log(`🔐 SMTP: smtp.gmail.com:587 (STARTTLS)`);
         console.log(`🔑 App password: ${gmailAppPassword ? '***' + gmailAppPassword.slice(-4) : 'NOT SET'}`);
+        console.log(`⚠️  Note: Port 587 used (port 465 blocked by Render firewall)`);
         
         // Verify connection configuration (non-blocking)
         transporter.verify(function (error, success) {
