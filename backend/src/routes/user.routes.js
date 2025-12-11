@@ -15,6 +15,7 @@ import {
   changePassword,
   displayCurrentUser,
   getUserProfile,
+  submitContactForm,
 } from "../controllers/users.controllers.js";
 import { checksession, verifyJWT } from "../middleware/auth.middleware.js";
 
@@ -33,6 +34,9 @@ router.post("/reset-password", resetPasswordWithOTP);
 router.post("/login", login);
 router.post("/logout", verifyJWT, logout);
 router.post("/refresh-token", refreshAccessToken);
+
+// Contact form
+router.post("/contact", submitContactForm);
 
 // Protected routes
 router.get("/profile", verifyJWT, getUserProfile);

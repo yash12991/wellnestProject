@@ -47,6 +47,7 @@ const FAQItem = ({ q, a, isOpen, onClick }) => (
 
 const Support = () => {
   const [openIndex, setOpenIndex] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // State for form
   const [formData, setFormData] = useState({
@@ -61,11 +62,33 @@ const Support = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Ticket Submitted:", formData);
-    alert("Your support ticket has been submitted!");
-    setFormData({ name: "", email: "", category: "General", message: "" });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/v1/api/user/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("✅ Your support ticket has been submitted! We'll get back to you soon.");
+        setFormData({ name: "", email: "", category: "General", message: "" });
+      } else {
+        alert("❌ " + (data.message || "Failed to submit. Please try again."));
+      }
+    } catch (error) {
+      console.error("Contact form error:", error);
+      alert("❌ Something went wrong. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -227,9 +250,10 @@ const Support = () => {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-4 rounded font-normal text-lg text-white bg-emerald-500 hover:from-green-400 hover:via-emerald-500 hover:to-green-500 shadow-lg shadow-emerald-500/30 transition-all duration-300 active:scale-95"
+            disabled={isSubmitting}
+            className="w-full py-4 rounded font-normal text-lg text-white bg-emerald-500 hover:from-green-400 hover:via-emerald-500 hover:to-green-500 shadow-lg shadow-emerald-500/30 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Submit Ticket
+            {isSubmitting ? 'Submitting...' : 'Submit Ticket'}
           </button>
         </form>
       </div>

@@ -52,8 +52,11 @@ const register = async (req, res) => {
       });
     }
 
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim();
+
     const existingUser = await User.findOne({
-      $or: [{ email }, { username }]
+      $or: [{ email: normalizedEmail }, { username }]
     });
 
     if (existingUser) {
@@ -70,7 +73,7 @@ const register = async (req, res) => {
     // Create user with OTP
     const user = new User({
       username,
-      email,
+      email: normalizedEmail,
       password, // Will be hashed by pre-save middleware
       role,
       otp,
@@ -82,7 +85,7 @@ const register = async (req, res) => {
     await user.save();
 
     // Send OTP email
-    const emailSent = await sendOTPEmail(email, otp);
+    const emailSent = await sendOTPEmail(normalizedEmail, otp);
 
     if (!emailSent) {
       // If email fails, delete the user
@@ -496,7 +499,7 @@ const login = async (req, res) => {
     }
 
     const user = await User.findOne({
-      $or: [{ username: username?.toLowerCase() }, { email }],
+      $or: [{ username: username?.toLowerCase() }, { email: email?.toLowerCase().trim() }],
     }).populate('profile');
 
 
@@ -529,15 +532,16 @@ const login = async (req, res) => {
     }
 
 
-    // // Check if onboarding is complete
-    // if (!user.isOnboardingComplete) {
-    //   return res.status(200).json({
-    //     success: true,
-    //     message: "Please complete your onboarding",
-    //     requiresOnboarding: true,
-    //     userId: user._id
-    //   });
-    // }
+    // Check if onboarding is complete
+    if (!user.isOnboardingComplete) {
+      return res.status(200).json({
+        success: true,
+        message: "Please complete your onboarding",
+        requiresOnboarding: true,
+        userId: user._id,
+        email: user.email
+      });
+    }
 
 
     const { accessToken, refreshToken } = await generateAccessTokenandRefreshToken(user._id);
@@ -1166,6 +1170,48 @@ export const getOrders = async (req, res) => {
   }
 };
 
+// Contact form submission
+const submitContactForm = async (req, res) => {
+  try {
+    const { name, email, category, message } = req.body;
+
+    if (!name || !email || !category || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email format"
+      });
+    }
+
+    // TODO: Save to database or send email to support team
+    // For now, just log it
+    console.log('📧 Contact Form Submission:', { name, email, category, message });
+
+    // You can send an email notification to your support team here
+    // await sendContactNotificationEmail(name, email, category, message);
+
+    return res.status(200).json({
+      success: true,
+      message: "Thank you for contacting us! We'll get back to you soon."
+    });
+
+  } catch (error) {
+    console.error("Error in submitContactForm:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: error.message
+    });
+  }
+};
+
 export {
   register,
   verifyOTP,
@@ -1182,4 +1228,5 @@ export {
   resetPasswordWithOTP,
   displayCurrentUser,
   getUserProfile,
+  submitContactForm,
 };
