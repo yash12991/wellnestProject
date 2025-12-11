@@ -758,7 +758,7 @@ const MealPlanTable = () => {
             font-size: 20px;
             font-weight: 700;
             color: #1a202c;
-            margin: 25px 0 15px 0;
+            margin: 25px 0 10px 0;
             padding-left: 12px;
             border-left: 4px solid #10b981;
           }
@@ -767,7 +767,7 @@ const MealPlanTable = () => {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            margin: 20px 0;
+            margin: 8px 0 20px 0;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             border-radius: 8px;
             overflow: hidden;
