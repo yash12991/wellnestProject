@@ -18,7 +18,7 @@ export const sendOTPEmail = async (email, otp) => {
         console.log(`📧 Attempting to send OTP email to: ${email} using Resend`);
         
         const { data, error } = await resend.emails.send({
-            from: 'WellNest <onboarding@resend.dev>',
+            from: 'WellNest <onboarding@wellnest.sbs>',
             to: [email],
             subject: 'Verify Your Email - WellNest OTP Code',
             text: `Welcome to WellNest!
@@ -162,7 +162,6 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
         const headerBytes = Array.from(pdfBuffer.subarray(0, 4));
         const isActualPDF = JSON.stringify(headerBytes) === JSON.stringify(pdfMagicBytes);
         const fileExtension = isActualPDF ? 'pdf' : 'txt';
-        const contentType = isActualPDF ? 'application/pdf' : 'text/plain; charset=utf-8';
         
         console.log(`Generated ${isActualPDF ? 'PDF' : 'text document'} for ${username}, size: ${pdfBuffer.length} bytes`);
 
@@ -300,7 +299,7 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
             `;
 
         const { data, error } = await resend.emails.send({
-            from: 'WellNest <onboarding@resend.dev>',
+            from: 'WellNest <onboarding@wellnest.sbs>',
             to: [email],
             subject: `Your Weekly Meal Plan from WellNest`,
             attachments: [
@@ -330,7 +329,7 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
 export const sendTestMail = async () => {
     try {
         const { data, error } = await resend.emails.send({
-            from: 'WellNest <onboarding@resend.dev>',
+            from: 'WellNest <onboarding@wellnest.sbs>',
             to: ['yash129912@gmail.com'],
             subject: 'Test Email from WellNest',
             html: '<p>This is a test email from <strong>WellNest</strong> using Resend!</p>',
