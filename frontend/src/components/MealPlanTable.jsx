@@ -950,23 +950,23 @@ const MealPlanTable = () => {
           <tbody>
             ${dayNames.map((day) => {
               const entry = mealPlan.find((d) => d.day === day) || {};
-              return \`
+              return `
                 <tr>
-                  <td class="day-cell">\${day.charAt(0).toUpperCase() + day.slice(1)}</td>
+                  <td class="day-cell">${day.charAt(0).toUpperCase() + day.slice(1)}</td>
                   <td>
-                    <div class="meal-name">\${entry.breakfast?.dish || "No meal planned"}</div>
-                    \${entry.breakfast?.calories ? \`<div class="calories">\${entry.breakfast.calories} kcal</div>\` : ""}
+                    <div class="meal-name">${entry.breakfast?.dish || "No meal planned"}</div>
+                    ${entry.breakfast?.calories ? `<div class="calories">${entry.breakfast.calories} kcal</div>` : ""}
                   </td>
                   <td>
-                    <div class="meal-name">\${entry.lunch?.dish || "No meal planned"}</div>
-                    \${entry.lunch?.calories ? \`<div class="calories">\${entry.lunch.calories} kcal</div>\` : ""}
+                    <div class="meal-name">${entry.lunch?.dish || "No meal planned"}</div>
+                    ${entry.lunch?.calories ? `<div class="calories">${entry.lunch.calories} kcal</div>` : ""}
                   </td>
                   <td>
-                    <div class="meal-name">\${entry.dinner?.dish || "No meal planned"}</div>
-                    \${entry.dinner?.calories ? \`<div class="calories">\${entry.dinner.calories} kcal</div>\` : ""}
+                    <div class="meal-name">${entry.dinner?.dish || "No meal planned"}</div>
+                    ${entry.dinner?.calories ? `<div class="calories">${entry.dinner.calories} kcal</div>` : ""}
                   </td>
                 </tr>
-              \`;
+              `;
             }).join("")}
           </tbody>
         </table>
