@@ -672,79 +672,313 @@ const MealPlanTable = () => {
   };
 
   const exportToPDF = () => {
-    // Create a printable version of the meal plan
+    const user = JSON.parse(localStorage.getItem("user"));
+    const username = user?.username || "User";
+    const totalCalories = getTotalCalories(mealPlan);
+    const avgCalories = Math.round(totalCalories / 7);
+
+    // Create a printable version of the meal plan with beautiful design
     const printWindow = window.open("", "_blank");
     const mealPlanHTML = `
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Weekly Meal Plan</title>
+        <meta charset="UTF-8">
+        <title>Weekly Meal Plan - ${username}</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <style>
-          body { font-family: Arial, sans-serif; margin: 20px; }
-          h1 { color: #10B981; text-align: center; }
-          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-          th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-          th { background-color: #f8f9fa; font-weight: bold; }
-          .day-header { background-color: #e8f5e8; font-weight: bold; }
-          .calories { color: #666; font-size: 0.9em; }
-          .total-calories { text-align: center; margin: 20px; font-size: 1.2em; font-weight: bold; }
+          @page { size: A4; margin: 0.5in; }
+          
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          
+          body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+            color: #1e293b;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            padding: 20px;
+          }
+          
+          .container { max-width: 1200px; margin: 0 auto; }
+          
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+          }
+          
+          .logo {
+            font-size: 48px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            letter-spacing: -1px;
+          }
+          
+          .title { 
+            font-size: 28px;
+            color: white;
+            margin: 10px 0;
+            font-weight: 600;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          }
+          
+          .subtitle {
+            color: rgba(255,255,255,0.95);
+            font-size: 16px;
+            margin-top: 8px;
+            font-weight: 400;
+          }
+          
+          .user-info-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+          }
+          
+          .info-item { display: flex; align-items: center; gap: 12px; }
+          .info-icon { font-size: 32px; }
+          .info-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 4px;
+          }
+          .info-value { font-size: 16px; font-weight: 600; color: #1e293b; }
+          
+          .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+          }
+          
+          .stat-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+          }
+          
+          .stat-icon { font-size: 40px; margin-bottom: 8px; display: block; }
+          .stat-value { font-size: 28px; font-weight: 700; color: #10b981; margin-bottom: 4px; }
+          .stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+          
+          .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 32px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+          
+          .section-title::before {
+            content: '';
+            width: 4px;
+            height: 32px;
+            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+            border-radius: 2px;
+          }
+          
+          table { 
+            width: 100%; 
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 16px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+          }
+          
+          th, td { 
+            padding: 16px 14px;
+            text-align: left; 
+            vertical-align: top;
+            border-bottom: 1px solid #e2e8f0;
+          }
+          
+          th { 
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          
+          tr:last-child td { border-bottom: none; }
+          
+          .day-header { 
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            width: 15%;
+          }
+          
+          .meal-cell { width: 28.33%; padding: 16px; background: white; }
+          
+          .meal-card {
+            padding: 12px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            border-radius: 8px;
+            border: 1px solid #d1fae5;
+          }
+          
+          .meal-name {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+          }
+          
+          .calories { 
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+          }
+          
+          .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 24px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+          }
+          
+          .footer-logo { font-size: 24px; font-weight: 700; color: #10b981; margin-bottom: 12px; }
+          .footer-text { color: #64748b; font-size: 12px; line-height: 1.8; }
+          .footer-copyright { margin-top: 12px; font-weight: 600; color: #475569; font-size: 11px; }
+          
+          @media print {
+            body { margin: 0; padding: 0; background: white; }
+            .header { page-break-after: avoid; }
+            table { page-break-inside: avoid; }
+          }
         </style>
       </head>
       <body>
-        <h1>🍽️ Your Weekly Meal Plan</h1>
-        <div class="total-calories">Total Weekly Calories: ${getTotalCalories(
-          mealPlan
-        )} kcal</div>
-        <table>
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Breakfast</th>
-              <th>Lunch</th>
-              <th>Dinner</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${dayNames
-              .map((day) => {
-                const entry = mealPlan.find((d) => d.day === day) || {};
-                return `
-                <tr>
-                  <td class="day-header">${
-                    day.charAt(0).toUpperCase() + day.slice(1)
-                  }</td>
-                  <td>
-                    <strong>${entry.breakfast?.dish || "-"}</strong>
-                    ${
-                      entry.breakfast?.calories
-                        ? `<br><span class="calories">${entry.breakfast.calories} kcal</span>`
-                        : ""
-                    }
-                  </td>
-                  <td>
-                    <strong>${entry.lunch?.dish || "-"}</strong>
-                    ${
-                      entry.lunch?.calories
-                        ? `<br><span class="calories">${entry.lunch.calories} kcal</span>`
-                        : ""
-                    }
-                  </td>
-                  <td>
-                    <strong>${entry.dinner?.dish || "-"}</strong>
-                    ${
-                      entry.dinner?.calories
-                        ? `<br><span class="calories">${entry.dinner.calories} kcal</span>`
-                        : ""
-                    }
-                  </td>
-                </tr>
-              `;
-              })
-              .join("")}
-          </tbody>
-        </table>
-        <div style="margin-top: 30px; text-align: center; color: #666;">
-          Generated on ${new Date().toLocaleDateString()} • WellNest Meal Planner
+        <div class="container">
+          <div class="header">
+            <div class="logo">🌱 WellNest</div>
+            <div class="title">Your Personalized Weekly Meal Plan</div>
+            <div class="subtitle">Scientifically crafted nutrition for optimal wellness</div>
+          </div>
+          
+          <div class="user-info-card">
+            <div class="info-item">
+              <span class="info-icon">👤</span>
+              <div class="info-content">
+                <div class="info-label">Prepared For</div>
+                <div class="info-value">${username}</div>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📅</span>
+              <div class="info-content">
+                <div class="info-label">Generated On</div>
+                <div class="info-value">${new Date().toLocaleDateString('en-US', { 
+                  month: 'short', 
+                  day: 'numeric', 
+                  year: 'numeric' 
+                })}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-icon">🔥</span>
+              <div class="stat-value">${totalCalories.toLocaleString()}</div>
+              <div class="stat-label">Weekly Calories</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">📊</span>
+              <div class="stat-value">${avgCalories.toLocaleString()}</div>
+              <div class="stat-label">Daily Average</div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">🍽️</span>
+              <div class="stat-value">21</div>
+              <div class="stat-label">Total Meals</div>
+            </div>
+          </div>
+
+          <h2 class="section-title">📅 Your Weekly Schedule</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>🌅 Breakfast</th>
+                <th>☀️ Lunch</th>
+                <th>🌙 Dinner</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${dayNames
+                .map((day) => {
+                  const entry = mealPlan.find((d) => d.day === day) || {};
+                  return `
+                  <tr>
+                    <td class="day-header">${day.charAt(0).toUpperCase() + day.slice(1)}</td>
+                    <td class="meal-cell">
+                      <div class="meal-card">
+                        <div class="meal-name">${entry.breakfast?.dish || "No meal planned"}</div>
+                        ${entry.breakfast?.calories ? `<span class="calories">${entry.breakfast.calories} kcal</span>` : ""}
+                      </div>
+                    </td>
+                    <td class="meal-cell">
+                      <div class="meal-card">
+                        <div class="meal-name">${entry.lunch?.dish || "No meal planned"}</div>
+                        ${entry.lunch?.calories ? `<span class="calories">${entry.lunch.calories} kcal</span>` : ""}
+                      </div>
+                    </td>
+                    <td class="meal-cell">
+                      <div class="meal-card">
+                        <div class="meal-name">${entry.dinner?.dish || "No meal planned"}</div>
+                        ${entry.dinner?.calories ? `<span class="calories">${entry.dinner.calories} kcal</span>` : ""}
+                      </div>
+                    </td>
+                  </tr>
+                `;
+                })
+                .join("")}
+            </tbody>
+          </table>
+
+          <div class="footer">
+            <div class="footer-logo">🌱 WellNest</div>
+            <div class="footer-text">
+              This meal plan was generated by WellNest's AI-powered nutrition system<br>
+              For support or questions, visit <strong>wellnest.sbs</strong>
+            </div>
+            <div class="footer-copyright">© 2025 WellNest. All rights reserved.</div>
+          </div>
         </div>
       </body>
       </html>
