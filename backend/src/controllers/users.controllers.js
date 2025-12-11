@@ -536,7 +536,7 @@ const login = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessTokenandRefreshToken(user._id);
 
     // Get user without sensitive data
-    const userResponse = await User.findById(user._id)
+    const loggedInUser = await User.findById(user._id)
       .select("-password -refreshToken -otp -otpExpiry")
       .populate('profile');
 
@@ -558,27 +558,11 @@ const login = async (req, res) => {
           success: true,
           message: "Please complete your onboarding",
           requiresOnboarding: true,
-          user: userResponse,
+          user: loggedInUser,
           accessToken,
           refreshToken
         });
     }
-
-
-    const loggedInUser = await User.findById(user._id)
-      .select("-password -refreshToken -otp -otpExpiry")
-      .populate('profile');
-
-
-    const options = {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      // Don't set domain for cross-domain requests - browser will handle it
-      // domain: process.env.NODE_ENV === "production" ? ".onrender.com" : undefined,
-      path: "/",
-    };
 
     return res
       .status(200)
