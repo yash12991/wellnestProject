@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const OAuthCallback = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [message, setMessage] = useState('Completing sign in...');
 
   useEffect(() => {
     const handleOAuthCallback = () => {
@@ -14,7 +15,8 @@ const OAuthCallback = () => {
 
       if (error) {
         console.error('OAuth error:', error);
-        navigate('/login?error=' + error);
+        setMessage('Authentication failed. Redirecting...');
+        setTimeout(() => navigate('/login?error=' + error), 1500);
         return;
       }
 
@@ -22,26 +24,34 @@ const OAuthCallback = () => {
         try {
           const user = JSON.parse(userString);
 
-          // Store tokens and user data
+          // Store tokens and user data with timestamp
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
           localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('lastLoginTime', Date.now().toString());
 
           console.log('✅ OAuth login successful:', user.email);
+          console.log('📝 Tokens stored successfully');
+
+          setMessage('Login successful! Redirecting...');
 
           // Redirect based on onboarding status
-          if (user.isOnboardingComplete) {
-            navigate('/dashboard');
-          } else {
-            navigate('/onboarding');
-          }
+          setTimeout(() => {
+            if (user.isOnboardingComplete) {
+              navigate('/dashboard');
+            } else {
+              navigate('/onboarding');
+            }
+          }, 1000);
         } catch (err) {
           console.error('Error parsing OAuth data:', err);
-          navigate('/login?error=invalid_data');
+          setMessage('Error processing login data...');
+          setTimeout(() => navigate('/login?error=invalid_data'), 1500);
         }
       } else {
         console.error('Missing OAuth data');
-        navigate('/login?error=missing_data');
+        setMessage('Missing authentication data...');
+        setTimeout(() => navigate('/login?error=missing_data'), 1500);
       }
     };
 
@@ -65,7 +75,7 @@ const OAuthCallback = () => {
         height: '50px',
         animation: 'spin 1s linear infinite'
       }}></div>
-      <p style={{ fontSize: '18px', color: '#666' }}>Completing sign in...</p>
+      <p style={{ fontSize: '18px', color: '#666' }}>{message}</p>
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }

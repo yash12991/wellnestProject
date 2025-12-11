@@ -359,8 +359,7 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
                 </div>
             </body>
             </html>
-            `,
-        };
+            `;
 
         const mailOptions = {
             from: `"WellNest" <${gmailUser}>`,
