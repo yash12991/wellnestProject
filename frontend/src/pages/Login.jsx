@@ -54,41 +54,31 @@ function Login() {
       );
 
       if (response.data.success) {
-        // Always save tokens first
+        // Always save tokens and user
         if (response.data.accessToken) {
           localStorage.setItem("accessToken", response.data.accessToken);
         }
         if (response.data.refreshToken) {
           localStorage.setItem("refreshToken", response.data.refreshToken);
         }
+        if (response.data.user) {
+          localStorage.setItem("user", JSON.stringify(response.data.user));
+        }
 
         // Check if onboarding is required
         if (response.data.requiresOnboarding) {
-          toast.info("Please complete your onboarding!");
-          setTimeout(() => {
-            navigate("/onboarding", { 
-              replace: true,
-              state: { userId: response.data.userId, email: response.data.email }
-            });
-          }, 1500);
-          setIsSubmitting(false);
+          toast.info("Redirecting to onboarding...");
+          navigate("/onboarding", { replace: true });
           return;
         }
 
-        // Normal login flow with user data
+        // Normal login flow
         const user = response.data.user;
-        localStorage.setItem("user", JSON.stringify(user));
-
         toast.success("Login successful!");
 
-        // Redirect based on onboarding status
         setTimeout(() => {
-          if (!user.isOnboardingComplete) {
-            navigate("/onboarding", { replace: true });
-          } else {
-            navigate("/dashboard", { replace: true });
-          }
-        }, 1500);
+          navigate("/dashboard", { replace: true });
+        }, 1000);
       } else {
         toast.error(response.data.message || "Login failed.");
       }

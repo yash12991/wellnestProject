@@ -535,16 +535,21 @@ const login = async (req, res) => {
     // Generate tokens first (needed even if onboarding incomplete)
     const { accessToken, refreshToken } = await generateAccessTokenandRefreshToken(user._id);
 
+    // Get user without sensitive data
+    const userResponse = await User.findById(user._id)
+      .select("-password -refreshToken -otp -otpExpiry")
+      .populate('profile');
+
+    const options = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      path: "/",
+    };
+
     // Check if onboarding is complete
     if (!user.isOnboardingComplete) {
-      const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-        path: "/",
-      };
-
       return res
         .status(200)
         .cookie("accessToken", accessToken, options)
@@ -553,8 +558,7 @@ const login = async (req, res) => {
           success: true,
           message: "Please complete your onboarding",
           requiresOnboarding: true,
-          userId: user._id,
-          email: user.email,
+          user: userResponse,
           accessToken,
           refreshToken
         });
