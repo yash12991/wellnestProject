@@ -721,31 +721,10 @@ export const generateMealPlanPDF = async (username, mealPlan) => {
       timeout: 30000
     };
     
-    // Try multiple Chrome paths for Render deployment
-    const possibleChromePaths = [
-      process.env.PUPPETEER_EXECUTABLE_PATH,
-      '/opt/render/.cache/puppeteer/chrome/linux-141.0.7390.122/chrome-linux64/chrome',
-      '/opt/render/.cache/puppeteer/chrome/linux-*/chrome-linux64/chrome'
-    ];
-    
-    for (const chromePath of possibleChromePaths) {
-      if (chromePath) {
-        try {
-          if (fs.existsSync(chromePath)) {
-            puppeteerOptions.executablePath = chromePath;
-            console.log('✅ Found Chrome at:', chromePath);
-            break;
-          }
-        } catch (err) {
-          // Path check failed, try next
-        }
-      }
-    }
-    
-    if (puppeteerOptions.executablePath) {
-      console.log('Using Chrome executable:', puppeteerOptions.executablePath);
-    } else {
-      console.log('⚠️  No Chrome path specified, using Puppeteer default');
+    // Use executable path if provided (for Render deployment)
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      puppeteerOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+      console.log('Using Chrome at:', process.env.PUPPETEER_EXECUTABLE_PATH);
     }
     
     browser = await puppeteer.launch(puppeteerOptions);

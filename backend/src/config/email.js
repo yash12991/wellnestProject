@@ -1,61 +1,11 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import dotenv from 'dotenv';
 import { generateMealPlanPDF } from '../utils/pdfGenerator.js';
 
-// Environment variables should be loaded by the main application
-dotenv.config(); // Commented out - loaded in index.js
+dotenv.config();
 
-// Initialize Gmail transporter with app password
-let transporter = null;
-const gmailUser = process.env.GMAIL_USER || process.env.EMAIL_USER || 'yash129912@gmail.com';
-const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
-
-try {
-    if (gmailAppPassword) {
-        // Use port 587 with STARTTLS (port 465 is blocked by many cloud providers including Render)
-        transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false, // Use STARTTLS
-            auth: {
-                user: gmailUser,
-                pass: gmailAppPassword
-            },
-            tls: {
-                ciphers: 'SSLv3',
-                rejectUnauthorized: false
-            },
-            connectionTimeout: 60000, // 60 seconds
-            greetingTimeout: 30000,
-            socketTimeout: 60000,
-            logger: true,
-            debug: true
-        });
-        
-        console.log("✅ Gmail email service initialized");
-        console.log(`📧 Email: ${gmailUser}`);
-        console.log(`🔐 SMTP: smtp.gmail.com:587 (STARTTLS)`);
-        console.log(`🔑 App password: ${gmailAppPassword ? '***' + gmailAppPassword.slice(-4) : 'NOT SET'}`);
-        console.log(`⚠️  Note: Port 587 used (port 465 blocked by Render firewall)`);
-        
-        // Verify connection configuration (non-blocking)
-        transporter.verify(function (error, success) {
-            if (error) {
-                console.error("⚠️  Gmail verification warning:", error.message);
-                console.error("📧 Email sending will be attempted anyway (verification can timeout on some networks)");
-                console.error("🔍 If emails fail, check: 1) App password, 2) 2-Step verification, 3) Network/firewall");
-            } else {
-                console.log("✅ Gmail server verified and ready to send emails");
-            }
-        });
-    } else {
-        console.warn("⚠️  GMAIL_APP_PASSWORD is not set in environment variables");
-        console.warn("📝 Email functionality will be limited. Set up Gmail App Password: https://myaccount.google.com/apppasswords");
-    }
-} catch (error) {
-    console.error("❌ Failed to initialize Gmail:", error.message);
-    console.warn("⚠️  Email functionality will be limited");
-}
+// Initialize Resend
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Generate OTP
 export const generateOTP = () => {
@@ -65,25 +15,12 @@ export const generateOTP = () => {
 // Send OTP email
 export const sendOTPEmail = async (email, otp) => {
     try {
-        // Check if transporter is initialized
-        if (!transporter) {
-            console.error("❌ Gmail transporter is not initialized. Cannot send email.");
-            throw new Error("Email service is not configured. Please contact support.");
-        }
-
-        // Validate environment variables
-        const appPassword = process.env.GMAIL_APP_PASSWORD;
-        if (!appPassword) {
-            console.error("❌ GMAIL_APP_PASSWORD environment variable is not set");
-            throw new Error("Email configuration is missing. Please set GMAIL_APP_PASSWORD environment variable.");
-        }
-
-        console.log(`📧 Attempting to send OTP email to: ${email}`);
+        console.log(`📧 Attempting to send OTP email to: ${email} using Resend`);
         
-        const mailOptions = {
-            from: `"WellNest" <${gmailUser}>`,
-            to: email,
-            subject: "Verify Your Email - WellNest OTP Code",
+        const { data, error } = await resend.emails.send({
+            from: 'WellNest <onboarding@resend.dev>',
+            to: [email],
+            subject: 'Verify Your Email - WellNest OTP Code',
             text: `Welcome to WellNest!
 
 Hi there,
@@ -140,22 +77,18 @@ This is an automated email, please do not reply.
             </body>
             </html>
             `,
-        };
+        });
 
-        const info = await transporter.sendMail(mailOptions);
+        if (error) {
+            console.error("❌ Resend API error:", error);
+            return false;
+        }
 
-        console.log("✅ OTP Email sent successfully via Gmail:", info.messageId);
+        console.log("✅ OTP Email sent successfully via Resend:", data.id);
         return true;
     } catch (error) {
         console.error("❌ Failed to send OTP email:", error.message);
         console.error("📋 Error details:", error);
-        
-        // Provide helpful error messages
-        if (error.message?.includes('Invalid login') || error.message?.includes('authentication')) {
-            console.error("🔐 Gmail authentication failed. Check your GMAIL_APP_PASSWORD environment variable.");
-            console.error("📝 Create an app password: https://myaccount.google.com/apppasswords");
-        }
-        
         return false;
     }
 };
@@ -164,20 +97,7 @@ This is an automated email, please do not reply.
 // Send meal plan email with PDF attachment
 export const sendMealPlanEmail = async (email, username, mealPlan) => {
     try {
-        // Check if transporter is initialized
-        if (!transporter) {
-            console.error("❌ Gmail transporter is not initialized. Cannot send email.");
-            throw new Error("Email service is not configured. Please contact support.");
-        }
-
-        // Validate environment variables
-        const appPassword = process.env.GMAIL_APP_PASSWORD;
-        if (!appPassword) {
-            console.error("❌ GMAIL_APP_PASSWORD environment variable is not set");
-            throw new Error("Email configuration is missing. Please set GMAIL_APP_PASSWORD environment variable.");
-        }
-
-        console.log(`📧 Attempting to send meal plan email to: ${email}`);
+        console.log(`📧 Attempting to send meal plan email to: ${email} using Resend`);
         
         // Generate PDF attachment
         const pdfBuffer = await generateMealPlanPDF(username, mealPlan);
@@ -379,34 +299,29 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
             </html>
             `;
 
-        const mailOptions = {
-            from: `"WellNest" <${gmailUser}>`,
-            to: email,
+        const { data, error } = await resend.emails.send({
+            from: 'WellNest <onboarding@resend.dev>',
+            to: [email],
             subject: `Your Weekly Meal Plan from WellNest`,
             attachments: [
                 {
                     filename: `${username.replace(/[^a-zA-Z0-9]/g, '_')}_Weekly_Meal_Plan_${new Date().toISOString().split('T')[0]}.${fileExtension}`,
                     content: pdfBuffer,
-                    contentType: contentType
                 }
             ],
             html: htmlContent
-        };
+        });
 
-        const info = await transporter.sendMail(mailOptions);
+        if (error) {
+            console.error("❌ Resend API error:", error);
+            return false;
+        }
 
-        console.log("✅ Meal Plan Email sent successfully via Gmail:", info.messageId);
+        console.log("✅ Meal Plan Email sent successfully via Resend:", data.id);
         return true;
     } catch (error) {
         console.error("❌ Failed to send meal plan email:", error.message);
         console.error("📋 Error details:", error);
-        
-        // Provide helpful error messages
-        if (error.message?.includes('Invalid login') || error.message?.includes('authentication')) {
-            console.error("🔐 Gmail authentication failed. Check your GMAIL_APP_PASSWORD environment variable.");
-            console.error("📝 Create an app password: https://myaccount.google.com/apppasswords");
-        }
-        
         return false;
     }
 };
@@ -414,22 +329,19 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
 // test function
 export const sendTestMail = async () => {
     try {
-        // Check if transporter is initialized
-        if (!transporter) {
-            console.error("❌ Gmail transporter is not initialized. Cannot send email.");
+        const { data, error } = await resend.emails.send({
+            from: 'WellNest <onboarding@resend.dev>',
+            to: ['yash129912@gmail.com'],
+            subject: 'Test Email from WellNest',
+            html: '<p>This is a test email from <strong>WellNest</strong> using Resend!</p>',
+        });
+
+        if (error) {
+            console.error("❌ Resend API error:", error);
             return false;
         }
 
-        const mailOptions = {
-            from: `"WellNest" <${gmailUser}>`,
-            to: "yash129912@gmail.com", // test email
-            subject: "Test Email from WellNest",
-            html: "<p>This is a test email from <strong>WellNest</strong> using Gmail!</p>",
-        };
-
-        const info = await transporter.sendMail(mailOptions);
-
-        console.log("✅ Email sent via Gmail:", info.messageId);
+        console.log("✅ Test email sent via Resend:", data.id);
         return true;
     } catch (error) {
         console.error("❌ Email error:", error);
