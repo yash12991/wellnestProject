@@ -7,27 +7,43 @@ dotenv.config(); // Commented out - loaded in index.js
 
 // Initialize Gmail transporter with app password
 let transporter = null;
-const gmailUser = process.env.GMAIL_USER || 'yash129912@gmail.com';
+const gmailUser = process.env.GMAIL_USER || process.env.EMAIL_USER || 'yash129912@gmail.com';
 const gmailAppPassword = process.env.GMAIL_APP_PASSWORD;
 
 try {
     if (gmailAppPassword) {
+        // Use port 465 with SSL (better for cloud environments like Render)
         transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true, // Use SSL
             auth: {
                 user: gmailUser,
                 pass: gmailAppPassword
-            }
+            },
+            tls: {
+                rejectUnauthorized: false
+            },
+            connectionTimeout: 30000, // 30 seconds
+            greetingTimeout: 10000,
+            socketTimeout: 60000,
+            logger: false,
+            debug: false
         });
-        console.log("✅ Gmail email service initialized");
-        console.log(`📧 Emails will be sent from: ${gmailUser}`);
         
-        // Verify connection configuration
+        console.log("✅ Gmail email service initialized");
+        console.log(`📧 Email: ${gmailUser}`);
+        console.log(`🔐 SMTP: smtp.gmail.com:465 (SSL)`);
+        console.log(`🔑 App password: ${gmailAppPassword ? '***' + gmailAppPassword.slice(-4) : 'NOT SET'}`);
+        
+        // Verify connection configuration (non-blocking)
         transporter.verify(function (error, success) {
             if (error) {
-                console.error("❌ Gmail verification failed:", error.message);
+                console.error("⚠️  Gmail verification warning:", error.message);
+                console.error("📧 Email sending will be attempted anyway (verification can timeout on some networks)");
+                console.error("🔍 If emails fail, check: 1) App password, 2) 2-Step verification, 3) Network/firewall");
             } else {
-                console.log("✅ Gmail server is ready to send emails");
+                console.log("✅ Gmail server verified and ready to send emails");
             }
         });
     } else {

@@ -705,7 +705,8 @@ export const generateMealPlanPDF = async (username, mealPlan) => {
     
     // Launch puppeteer browser with more options
     console.log('Launching puppeteer browser...');
-    browser = await puppeteer.launch({
+    
+    const puppeteerOptions = {
       headless: true,
       args: [
         '--no-sandbox', 
@@ -713,10 +714,20 @@ export const generateMealPlanPDF = async (username, mealPlan) => {
         '--disable-dev-shm-usage',
         '--disable-gpu',
         '--disable-web-security',
-        '--disable-extensions'
+        '--disable-extensions',
+        '--single-process',
+        '--no-zygote'
       ],
       timeout: 30000
-    });
+    };
+    
+    // Use executable path if provided (for Render deployment)
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      puppeteerOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+      console.log('Using Chrome at:', process.env.PUPPETEER_EXECUTABLE_PATH);
+    }
+    
+    browser = await puppeteer.launch(puppeteerOptions);
     console.log('Browser launched successfully');
     
     const page = await browser.newPage();
