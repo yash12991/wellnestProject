@@ -173,19 +173,25 @@ export const generateMealPlanHTML = (username, mealPlan) => {
       <tr>
         <td class="day-header">${dayName.charAt(0).toUpperCase() + dayName.slice(1)}</td>
         <td class="meal-cell">
-          <div class="meal-name">${dayData.breakfast?.dish || 'No meal planned'}</div>
-          ${dayData.breakfast?.calories ? `<div class="calories">${dayData.breakfast.calories} kcal</div>` : ''}
-          ${dayData.breakfast?.recipe ? `<div class="recipe-full">${dayData.breakfast.recipe}</div>` : ''}
+          <div class="meal-card">
+            <div class="meal-name">${dayData.breakfast?.dish || 'No meal planned'}</div>
+            ${dayData.breakfast?.calories ? `<span class="calories">${dayData.breakfast.calories} kcal</span>` : ''}
+            ${dayData.breakfast?.recipe ? `<div class="recipe">${dayData.breakfast.recipe}</div>` : ''}
+          </div>
         </td>
         <td class="meal-cell">
-          <div class="meal-name">${dayData.lunch?.dish || 'No meal planned'}</div>
-          ${dayData.lunch?.calories ? `<div class="calories">${dayData.lunch.calories} kcal</div>` : ''}
-          ${dayData.lunch?.recipe ? `<div class="recipe-full">${dayData.lunch.recipe}</div>` : ''}
+          <div class="meal-card">
+            <div class="meal-name">${dayData.lunch?.dish || 'No meal planned'}</div>
+            ${dayData.lunch?.calories ? `<span class="calories">${dayData.lunch.calories} kcal</span>` : ''}
+            ${dayData.lunch?.recipe ? `<div class="recipe">${dayData.lunch.recipe}</div>` : ''}
+          </div>
         </td>
         <td class="meal-cell">
-          <div class="meal-name">${dayData.dinner?.dish || 'No meal planned'}</div>
-          ${dayData.dinner?.calories ? `<div class="calories">${dayData.dinner.calories} kcal</div>` : ''}
-          ${dayData.dinner?.recipe ? `<div class="recipe-full">${dayData.dinner.recipe}</div>` : ''}
+          <div class="meal-card">
+            <div class="meal-name">${dayData.dinner?.dish || 'No meal planned'}</div>
+            ${dayData.dinner?.calories ? `<span class="calories">${dayData.dinner.calories} kcal</span>` : ''}
+            ${dayData.dinner?.recipe ? `<div class="recipe">${dayData.dinner.recipe}</div>` : ''}
+          </div>
         </td>
       </tr>
     `;
@@ -197,10 +203,11 @@ export const generateMealPlanHTML = (username, mealPlan) => {
     <head>
       <meta charset="UTF-8">
       <title>Weekly Meal Plan - ${username}</title>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
       <style>
         @page {
           size: A4;
-          margin: 0.4in;
+          margin: 0.5in;
         }
         
         * {
@@ -210,298 +217,565 @@ export const generateMealPlanHTML = (username, mealPlan) => {
         }
         
         body { 
-          font-family: 'Arial', sans-serif; 
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
           margin: 0;
-          padding: 15px;
-          color: #333;
-          line-height: 1.3;
+          padding: 0;
+          color: #1e293b;
+          line-height: 1.6;
+          background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
         }
         
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+        
+        /* Header Section */
         .header {
           text-align: center;
-          margin-bottom: 15px;
-          padding-bottom: 12px;
-          border-bottom: 2px solid #10B981;
+          margin-bottom: 30px;
+          padding: 30px 20px;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          border-radius: 16px;
+          box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .header::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          right: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+          animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 0.3; }
+          50% { transform: scale(1.1); opacity: 0.5; }
         }
         
         .logo {
-          font-size: 24px;
-          font-weight: bold;
-          color: #10B981;
-          margin-bottom: 6px;
+          font-size: 48px;
+          font-weight: 800;
+          color: white;
+          margin-bottom: 10px;
+          text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          letter-spacing: -1px;
+          position: relative;
+          z-index: 1;
+        }
+        
+        .logo-icon {
+          display: inline-block;
+          font-size: 56px;
+          margin-right: 8px;
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
         }
         
         .title { 
-          font-size: 20px;
-          color: #1f2937;
-          margin: 6px 0 4px 0;
-          font-weight: bold;
+          font-size: 28px;
+          color: white;
+          margin: 10px 0;
+          font-weight: 600;
+          position: relative;
+          z-index: 1;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .subtitle {
-          color: #6b7280;
-          font-size: 12px;
-          margin-bottom: 0;
-        }
-        
-        .user-info {
-          background-color: #f0fdf4;
-          padding: 12px;
-          border-radius: 6px;
-          margin: 10px 0;
-          border-left: 3px solid #10B981;
-          font-size: 12px;
-        }
-        
-        .calories-summary {
-          text-align: center;
+          color: rgba(255,255,255,0.95);
           font-size: 16px;
-          font-weight: bold;
-          color: #10B981;
-          margin: 12px 0;
-          padding: 8px;
-          background-color: #f0fdf4;
-          border-radius: 6px;
+          margin-top: 8px;
+          font-weight: 400;
+          position: relative;
+          z-index: 1;
         }
         
-        table { 
-          width: 100%; 
-          border-collapse: collapse; 
-          margin: 8px 0 0 0;
-          box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        /* User Info Card */
+        .user-info-card {
+          background: white;
+          padding: 24px;
+          border-radius: 12px;
+          margin: 20px 0;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+          border: 1px solid #e2e8f0;
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 20px;
         }
         
-        th, td { 
-          border: 1px solid #e5e7eb; 
-          padding: 8px 6px;
-          text-align: left; 
-          vertical-align: top;
-        }
-        
-        th { 
-          background-color: #f9fafb; 
-          font-weight: bold;
-          color: #374151;
-          font-size: 12px;
-          padding: 10px 6px;
-        }
-        
-        .day-header { 
-          background-color: #f3f4f6; 
-          font-weight: bold;
-          text-transform: capitalize;
-          color: #1f2937;
-          width: 15%;
-        }
-        
-        .meal-cell {
-          width: 28.33%;
-          padding: 8px 6px;
-        }
-        
-        .meal-name {
-          font-weight: bold;
-          color: #1f2937;
-          margin-bottom: 3px;
-          font-size: 11px;
-        }
-        
-        .calories { 
-          color: #10B981; 
-          font-size: 10px;
-          font-weight: 600;
-          margin-bottom: 3px;
-        }
-        
-        .recipe {
-          color: #6b7280;
-          font-size: 9px;
-          font-style: italic;
-          line-height: 1.2;
-          margin-top: 2px;
-        }
-        
-        .recipe-full {
-          color: #374151;
-          font-size: 9px;
-          line-height: 1.4;
-          margin-top: 4px;
-          padding: 4px;
-          background-color: #f9fafb;
-          border-radius: 3px;
-          border-left: 2px solid #10B981;
-        }
-        
-        .tips {
-          background-color: #f8fafc;
-          padding: 15px;
-          border-radius: 6px;
-          margin: 15px 0 0 0;
-          border-left: 3px solid #3b82f6;
-        }
-        
-        .tips h3 {
-          margin: 0 0 10px 0;
-          color: #1e40af;
-          font-size: 14px;
-        }
-        
-        .tips ul {
-          margin: 0;
-          padding-left: 16px;
-          color: #374151;
-        }
-        
-        .tips li {
-          margin-bottom: 5px;
-          font-size: 11px;
-          line-height: 1.3;
-        }
-        
-        .personalized-tips {
-          margin-top: 15px;
-        }
-        
-        .tip-item {
-          background-color: #f8fafc;
-          border-left: 3px solid #10b981;
-          margin-bottom: 10px;
-          padding: 10px;
-          border-radius: 4px;
-        }
-        
-        .tip-header {
+        .info-item {
           display: flex;
           align-items: center;
+          gap: 12px;
+        }
+        
+        .info-icon {
+          font-size: 32px;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .info-content {
+          flex: 1;
+        }
+        
+        .info-label {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          color: #64748b;
+          font-weight: 600;
           margin-bottom: 4px;
         }
         
-        .tip-icon {
+        .info-value {
           font-size: 16px;
-          margin-right: 6px;
+          font-weight: 600;
+          color: #1e293b;
         }
         
-        .tip-category {
-          font-size: 9px;
-          color: #6b7280;
+        /* Stats Cards */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+          margin: 24px 0;
+        }
+        
+        .stat-card {
+          background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+          padding: 20px;
+          border-radius: 12px;
+          text-align: center;
+          border: 2px solid #e2e8f0;
+          transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+          border-color: #10b981;
+        }
+        
+        .stat-icon {
+          font-size: 40px;
+          margin-bottom: 8px;
+          display: block;
+        }
+        
+        .stat-value {
+          font-size: 28px;
+          font-weight: 700;
+          color: #10b981;
+          margin-bottom: 4px;
+        }
+        
+        .stat-label {
+          font-size: 12px;
+          color: #64748b;
           text-transform: uppercase;
           letter-spacing: 0.5px;
           font-weight: 600;
         }
         
-        .tip-title {
-          font-size: 11px;
-          font-weight: bold;
-          color: #1f2937;
-          margin: 2px 0;
+        /* Meal Plan Table */
+        .meal-plan-section {
+          margin: 32px 0;
         }
         
-        .tip-content {
-          font-size: 10px;
-          color: #374151;
+        .section-title {
+          font-size: 24px;
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .section-title::before {
+          content: '';
+          width: 4px;
+          height: 32px;
+          background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+          border-radius: 2px;
+        }
+        
+        table { 
+          width: 100%; 
+          border-collapse: separate;
+          border-spacing: 0;
+          margin: 16px 0;
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        th, td { 
+          padding: 16px 14px;
+          text-align: left; 
+          vertical-align: top;
+          border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th { 
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+          font-weight: 700;
+          color: #1e293b;
+          font-size: 13px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+        }
+        
+        tr:last-child td {
+          border-bottom: none;
+        }
+        
+        tr:hover {
+          background-color: #f8fafc;
+        }
+        
+        .day-header { 
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          font-weight: 700;
+          text-transform: uppercase;
+          font-size: 14px;
+          letter-spacing: 0.5px;
+          width: 15%;
+          position: relative;
+        }
+        
+        .day-header::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 2px;
+          height: 60%;
+          background: rgba(255,255,255,0.3);
+        }
+        
+        .meal-cell {
+          width: 28.33%;
+          padding: 16px;
+          background: white;
+        }
+        
+        .meal-card {
+          padding: 12px;
+          background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+          border-radius: 8px;
+          border: 1px solid #d1fae5;
+          transition: all 0.2s ease;
+        }
+        
+        .meal-card:hover {
+          transform: scale(1.02);
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+        
+        .meal-name {
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 8px;
+          font-size: 13px;
           line-height: 1.4;
         }
         
-        .footer {
-          margin-top: 20px;
-          text-align: center;
-          padding-top: 12px;
-          border-top: 1px solid #e5e7eb;
-          color: #6b7280;
+        .calories { 
+          display: inline-block;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          font-size: 11px;
+          font-weight: 700;
+          padding: 4px 10px;
+          border-radius: 20px;
+          margin-bottom: 8px;
+        }
+        
+        .recipe {
+          color: #64748b;
           font-size: 10px;
+          line-height: 1.5;
+          margin-top: 8px;
+          padding-top: 8px;
+          border-top: 1px solid #e2e8f0;
         }
         
-        .generation-date {
-          margin-top: 6px;
+        /* Tips Section */
+        .tips-section {
+          background: white;
+          padding: 24px;
+          border-radius: 12px;
+          margin: 24px 0;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+          border-left: 4px solid #3b82f6;
+        }
+        
+        .tips-section h3 {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 16px;
+          color: #1e293b;
+          font-size: 20px;
+          font-weight: 700;
+        }
+        
+        .tips-section ul {
+          margin: 0;
+          padding-left: 24px;
+          color: #475569;
+        }
+        
+        .tips-section li {
+          margin-bottom: 10px;
+          font-size: 13px;
+          line-height: 1.6;
+        }
+        
+        .tips-section li::marker {
+          color: #10b981;
+          font-weight: bold;
+        }
+        
+        /* Personalized Tips */
+        .personalized-tips {
+          margin-top: 24px;
+        }
+        
+        .tip-item {
+          background: white;
+          border-left: 4px solid #10b981;
+          margin-bottom: 16px;
+          padding: 20px;
+          border-radius: 8px;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+          transition: all 0.3s ease;
+        }
+        
+        .tip-item:hover {
+          transform: translateX(4px);
+          box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+        }
+        
+        .tip-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 8px;
+        }
+        
+        .tip-icon {
+          font-size: 32px;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        
+        .tip-category {
+          font-size: 10px;
+          color: #64748b;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          font-weight: 700;
+          background: #f1f5f9;
+          padding: 4px 10px;
+          border-radius: 12px;
+        }
+        
+        .tip-title {
+          font-size: 16px;
+          font-weight: 700;
+          color: #1e293b;
+          margin: 8px 0;
+        }
+        
+        .tip-content {
+          font-size: 13px;
+          color: #475569;
+          line-height: 1.7;
+        }
+        
+        /* Footer */
+        .footer {
+          margin-top: 40px;
+          text-align: center;
+          padding: 24px;
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+          border-radius: 12px;
+          border: 1px solid #e2e8f0;
+        }
+        
+        .footer-logo {
+          font-size: 24px;
+          font-weight: 700;
+          color: #10b981;
+          margin-bottom: 12px;
+        }
+        
+        .footer-text {
+          color: #64748b;
+          font-size: 12px;
+          line-height: 1.8;
+        }
+        
+        .footer-copyright {
+          margin-top: 12px;
           font-weight: 600;
+          color: #475569;
+          font-size: 11px;
         }
         
-        /* Compact print styles */
+        /* Print Styles */
         @media print {
           body { 
             margin: 0; 
+            padding: 0;
+            background: white;
+          }
+          .container {
             padding: 10px;
           }
           .header { 
-            page-break-after: avoid; 
-            margin-bottom: 10px;
+            page-break-after: avoid;
+            margin-bottom: 20px;
+          }
+          .meal-plan-section {
+            page-break-inside: avoid;
           }
           table { 
             page-break-inside: avoid;
-            margin-top: 5px;
           }
-          tr { 
-            page-break-inside: avoid; 
-          }
-          .tips {
-            margin-top: 10px;
+          .tip-item {
+            page-break-inside: avoid;
           }
         }
       </style>
     </head>
     <body>
-      <div class="header">
-        <div class="logo">🌱 WellNest</div>
-        <div class="title">Weekly Meal Plan</div>
-        <div class="subtitle">Personalized nutrition for your wellness journey</div>
-      </div>
-      
-      <div class="user-info">
-        <strong>Prepared for:</strong> ${username}<br>
-        <strong>Generated on:</strong> ${new Date().toLocaleDateString('en-US', { 
-          weekday: 'long', 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
-      </div>
-      
-      <div class="calories-summary">
-        Total Weekly Calories: ${totalCalories} kcal
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Day</th>
-            <th>🌅 Breakfast</th>
-            <th>🔥 Lunch</th>
-            <th>🌙 Dinner</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${mealPlanRows}
-        </tbody>
-      </table>
-
-      <div class="tips">
-        <h3>💡 General Guidelines:</h3>
-        <ul>
-          <li>Stay hydrated by drinking plenty of water throughout the day</li>
-          <li>Try to eat meals at consistent times to regulate your metabolism</li>
-          <li>Feel free to swap similar meals within the same category if needed</li>
-          <li>Listen to your body and adjust portions based on your hunger levels</li>
-        </ul>
-      </div>
-
-      <div class="personalized-tips" style="margin-top: 20px; page-break-inside: avoid;">
-        <h3>🎯 Personalized Tips for Your Meal Plan:</h3>
-        ${personalizedTips.map(tip => `
-          <div class="tip-item">
-            <div class="tip-header">
-              <span class="tip-icon">${tip.icon}</span>
-              <span class="tip-category">${tip.category}</span>
-            </div>
-            <div class="tip-title">${tip.title}</div>
-            <div class="tip-content">${tip.content}</div>
+      <div class="container">
+        <!-- Header -->
+        <div class="header">
+          <div class="logo">
+            <span class="logo-icon">🌱</span>WellNest
           </div>
-        `).join('')}
-      </div>
+          <div class="title">Your Personalized Weekly Meal Plan</div>
+          <div class="subtitle">Scientifically crafted nutrition for optimal wellness</div>
+        </div>
+        
+        <!-- User Info -->
+        <div class="user-info-card">
+          <div class="info-item">
+            <span class="info-icon">👤</span>
+            <div class="info-content">
+              <div class="info-label">Prepared For</div>
+              <div class="info-value">${username}</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <span class="info-icon">📅</span>
+            <div class="info-content">
+              <div class="info-label">Generated On</div>
+              <div class="info-value">${new Date().toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+              })}</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-icon">🔥</span>
+            <div class="stat-value">${totalCalories.toLocaleString()}</div>
+            <div class="stat-label">Weekly Calories</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📊</span>
+            <div class="stat-value">${Math.round(totalCalories / 7).toLocaleString()}</div>
+            <div class="stat-label">Daily Average</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🍽️</span>
+            <div class="stat-value">21</div>
+            <div class="stat-label">Total Meals</div>
+          </div>
+        </div>
 
-      <div class="footer">
-        <div>This meal plan was generated by WellNest's AI nutrition system</div>
-        <div>For support, visit wellnest.com or contact our nutrition team</div>
-        <div class="generation-date">© 2025 WellNest. All rights reserved.</div>
+        <!-- Meal Plan Section -->
+        <div class="meal-plan-section">
+          <h2 class="section-title">📅 Your Weekly Schedule</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>🌅 Breakfast</th>
+                <th>☀️ Lunch</th>
+                <th>🌙 Dinner</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${mealPlanRows}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- General Tips -->
+        <div class="tips-section">
+          <h3>💡 Essential Guidelines</h3>
+          <ul>
+            <li>💧 <strong>Stay Hydrated:</strong> Drink 8-10 glasses of water throughout the day for optimal metabolism</li>
+            <li>⏰ <strong>Consistent Timing:</strong> Eat meals at regular intervals to regulate your body's metabolism</li>
+            <li>🔄 <strong>Flexibility:</strong> Feel free to swap similar meals within the same category based on your preferences</li>
+            <li>👂 <strong>Listen to Your Body:</strong> Adjust portion sizes based on your hunger levels and activity</li>
+            <li>🥗 <strong>Meal Prep:</strong> Prepare ingredients in advance on weekends to save time during busy weekdays</li>
+          </ul>
+        </div>
+
+        <!-- Personalized Tips -->
+        ${personalizedTips.length > 0 ? `
+        <div class="personalized-tips">
+          <h2 class="section-title">🎯 Personalized Recommendations</h2>
+          ${personalizedTips.map(tip => `
+            <div class="tip-item">
+              <div class="tip-header">
+                <span class="tip-icon">${tip.icon}</span>
+                <span class="tip-category">${tip.category}</span>
+              </div>
+              <div class="tip-title">${tip.title}</div>
+              <div class="tip-content">${tip.content}</div>
+            </div>
+          `).join('')}
+        </div>
+        ` : ''}
+
+        <!-- Footer -->
+        <div class="footer">
+          <div class="footer-logo">🌱 WellNest</div>
+          <div class="footer-text">
+            This meal plan was generated by WellNest's AI-powered nutrition system<br>
+            For support or questions, visit <strong>wellnest.sbs</strong><br>
+            Consult with a healthcare professional before making significant dietary changes
+          </div>
+          <div class="footer-copyright">© 2025 WellNest. All rights reserved.</div>
+        </div>
       </div>
     </body>
     </html>
