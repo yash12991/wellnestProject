@@ -686,166 +686,227 @@ const MealPlanTable = () => {
         <meta charset="UTF-8">
         <title>Weekly Meal Plan - ${username}</title>
         <style>
-          @page { size: A4; margin: 0.75in; }
+          @page { size: A4; margin: 0.6in; }
           * { margin: 0; padding: 0; box-sizing: border-box; }
           
           body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            color: #2d3748;
-            line-height: 1.5;
+            padding: 0;
+            color: #1a202c;
+            line-height: 1.6;
             background: white;
           }
           
           .header {
             text-align: center;
-            padding: 20px;
-            border-bottom: 3px solid #10b981;
-            margin-bottom: 20px;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
           }
           
           .header h1 {
-            font-size: 32px;
-            color: #10b981;
+            font-size: 36px;
+            color: white;
             margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
           }
           
           .header p {
-            color: #64748b;
-            font-size: 14px;
-            margin: 4px 0;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 15px;
+            margin: 0;
+            font-weight: 500;
           }
           
           .info-bar {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #e2e8f0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
           }
           
           .info-item {
             text-align: center;
-            flex: 1;
+            padding: 18px;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: transform 0.2s;
           }
           
           .info-label {
-            font-size: 11px;
+            font-size: 10px;
             color: #64748b;
             text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
           }
           
           .info-value {
-            font-size: 20px;
+            font-size: 22px;
             color: #10b981;
-            font-weight: 700;
+            font-weight: 800;
             margin-top: 4px;
+          }
+          
+          .section-header {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            margin: 25px 0 15px 0;
+            padding-left: 12px;
+            border-left: 4px solid #10b981;
           }
           
           table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
           }
           
           th {
-            background: #10b981;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            padding: 12px;
+            padding: 14px 12px;
             text-align: left;
             font-weight: 600;
             font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
           }
           
           td {
-            padding: 12px;
-            border: 1px solid #e2e8f0;
+            padding: 14px 12px;
+            border-bottom: 1px solid #e2e8f0;
             vertical-align: top;
+            background: white;
+          }
+          
+          tr:last-child td {
+            border-bottom: none;
+          }
+          
+          tr:hover td {
+            background: #f8fafc;
           }
           
           .day-cell {
-            background: #f0fdf4;
-            font-weight: 600;
-            color: #10b981;
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            font-weight: 700;
+            color: #065f46;
             width: 12%;
+            border-right: 2px solid #10b981;
           }
           
           .meal-name {
             font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 4px;
+            color: #1a202c;
+            margin-bottom: 6px;
+            font-size: 14px;
           }
           
           .calories {
-            color: #10b981;
-            font-size: 12px;
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            font-size: 11px;
             font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
           }
           
           .page-break {
             page-break-before: always;
+            margin-top: 40px;
           }
           
           .tips-page {
-            margin-top: 40px;
+            margin-top: 0;
           }
           
           .tips-header {
             text-align: center;
-            padding: 20px;
-            border-bottom: 3px solid #3b82f6;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
           }
           
           .tips-header h2 {
-            font-size: 28px;
-            color: #3b82f6;
+            font-size: 32px;
+            color: white;
             margin-bottom: 8px;
+            font-weight: 700;
+          }
+          
+          .tips-header p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 15px;
+            margin: 0;
           }
           
           .tips-section {
             margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
           }
           
           .tips-section h3 {
-            color: #2d3748;
+            color: #1a202c;
             font-size: 20px;
+            font-weight: 700;
             margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #10b981;
           }
           
           .tips-section ul {
             list-style: none;
             padding: 0;
+            margin: 0;
           }
           
           .tips-section li {
-            padding: 10px;
-            margin-bottom: 10px;
-            background: #f8fafc;
+            padding: 12px 15px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
             border-left: 4px solid #10b981;
-            border-radius: 4px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+          }
+          
+          .tips-section li strong {
+            color: #10b981;
           }
           
           .footer {
             margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
+            padding: 20px;
+            border-top: 3px solid #e2e8f0;
             text-align: center;
             color: #64748b;
             font-size: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
           }
           
           @media print {
             body { margin: 0; padding: 10px; }
             .page-break { page-break-before: always; }
             table { page-break-inside: avoid; }
+            .tips-section { page-break-inside: avoid; }
           }
         </style>
       </head>
@@ -858,22 +919,24 @@ const MealPlanTable = () => {
 
         <div class="info-bar">
           <div class="info-item">
-            <div class="info-label">Prepared For</div>
-            <div class="info-value" style="font-size: 16px; color: #2d3748;">${username}</div>
+            <div class="info-label">👤 Prepared For</div>
+            <div class="info-value" style="font-size: 18px; color: #1a202c;">${username}</div>
           </div>
           <div class="info-item">
-            <div class="info-label">Date</div>
-            <div class="info-value" style="font-size: 16px; color: #2d3748;">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
+            <div class="info-label">📅 Date</div>
+            <div class="info-value" style="font-size: 18px; color: #1a202c;">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
           </div>
           <div class="info-item">
-            <div class="info-label">Weekly Calories</div>
+            <div class="info-label">🔥 Weekly Total</div>
             <div class="info-value">${totalCalories.toLocaleString()}</div>
           </div>
           <div class="info-item">
-            <div class="info-label">Daily Average</div>
+            <div class="info-label">📊 Daily Avg</div>
             <div class="info-value">${avgCalories.toLocaleString()}</div>
           </div>
         </div>
+
+        <div class="section-header">📅 Your Weekly Schedule</div>
 
         <table>
           <thead>
