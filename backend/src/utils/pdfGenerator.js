@@ -203,11 +203,10 @@ export const generateMealPlanHTML = (username, mealPlan) => {
     <head>
       <meta charset="UTF-8">
       <title>Weekly Meal Plan - ${username}</title>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
       <style>
         @page {
           size: A4;
-          margin: 0.5in;
+          margin: 0.75in;
         }
         
         * {
@@ -217,564 +216,283 @@ export const generateMealPlanHTML = (username, mealPlan) => {
         }
         
         body { 
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
           margin: 0;
-          padding: 0;
-          color: #1e293b;
-          line-height: 1.6;
-          background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-        }
-        
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
           padding: 20px;
+          color: #2d3748;
+          line-height: 1.5;
+          background: white;
         }
         
-        /* Header Section */
         .header {
           text-align: center;
-          margin-bottom: 30px;
-          padding: 30px 20px;
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          border-radius: 16px;
-          box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
-          position: relative;
-          overflow: hidden;
+          padding: 20px;
+          border-bottom: 3px solid #10b981;
+          margin-bottom: 20px;
         }
         
-        .header::before {
-          content: '';
-          position: absolute;
-          top: -50%;
-          right: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-          animation: pulse 4s ease-in-out infinite;
+        .header h1 {
+          font-size: 32px;
+          color: #10b981;
+          margin-bottom: 8px;
         }
         
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 0.3; }
-          50% { transform: scale(1.1); opacity: 0.5; }
+        .header p {
+          color: #64748b;
+          font-size: 14px;
+          margin: 4px 0;
         }
         
-        .logo {
-          font-size: 48px;
-          font-weight: 800;
-          color: white;
-          margin-bottom: 10px;
-          text-shadow: 0 4px 12px rgba(0,0,0,0.15);
-          letter-spacing: -1px;
-          position: relative;
-          z-index: 1;
-        }
-        
-        .logo-icon {
-          display: inline-block;
-          font-size: 56px;
-          margin-right: 8px;
-          animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        
-        .title { 
-          font-size: 28px;
-          color: white;
-          margin: 10px 0;
-          font-weight: 600;
-          position: relative;
-          z-index: 1;
-          text-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        .subtitle {
-          color: rgba(255,255,255,0.95);
-          font-size: 16px;
-          margin-top: 8px;
-          font-weight: 400;
-          position: relative;
-          z-index: 1;
-        }
-        
-        /* User Info Card */
-        .user-info-card {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          margin: 20px 0;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        .info-bar {
+          display: flex;
+          justify-content: space-between;
+          padding: 15px;
+          background: #f8fafc;
+          border-radius: 8px;
+          margin-bottom: 20px;
           border: 1px solid #e2e8f0;
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 20px;
         }
         
         .info-item {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        
-        .info-icon {
-          font-size: 32px;
-          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        .info-content {
+          text-align: center;
           flex: 1;
         }
         
         .info-label {
           font-size: 11px;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
           color: #64748b;
+          text-transform: uppercase;
           font-weight: 600;
-          margin-bottom: 4px;
+          letter-spacing: 0.5px;
         }
         
         .info-value {
-          font-size: 16px;
-          font-weight: 600;
-          color: #1e293b;
-        }
-        
-        /* Stats Cards */
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 16px;
-          margin: 24px 0;
-        }
-        
-        .stat-card {
-          background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-          padding: 20px;
-          border-radius: 12px;
-          text-align: center;
-          border: 2px solid #e2e8f0;
-          transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-          border-color: #10b981;
-        }
-        
-        .stat-icon {
-          font-size: 40px;
-          margin-bottom: 8px;
-          display: block;
-        }
-        
-        .stat-value {
-          font-size: 28px;
-          font-weight: 700;
+          font-size: 20px;
           color: #10b981;
-          margin-bottom: 4px;
-        }
-        
-        .stat-label {
-          font-size: 12px;
-          color: #64748b;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          font-weight: 600;
-        }
-        
-        /* Meal Plan Table */
-        .meal-plan-section {
-          margin: 32px 0;
-        }
-        
-        .section-title {
-          font-size: 24px;
           font-weight: 700;
-          color: #1e293b;
-          margin-bottom: 20px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
+          margin-top: 4px;
         }
         
-        .section-title::before {
-          content: '';
-          width: 4px;
-          height: 32px;
-          background: linear-gradient(180deg, #10b981 0%, #059669 100%);
-          border-radius: 2px;
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 20px 0;
         }
         
-        table { 
-          width: 100%; 
-          border-collapse: separate;
-          border-spacing: 0;
-          margin: 16px 0;
-          background: white;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        
-        th, td { 
-          padding: 16px 14px;
-          text-align: left; 
-          vertical-align: top;
-          border-bottom: 1px solid #e2e8f0;
-        }
-        
-        th { 
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-          font-weight: 700;
-          color: #1e293b;
-          font-size: 13px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          position: sticky;
-          top: 0;
-          z-index: 10;
-        }
-        
-        tr:last-child td {
-          border-bottom: none;
-        }
-        
-        tr:hover {
-          background-color: #f8fafc;
-        }
-        
-        .day-header { 
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        th {
+          background: #10b981;
           color: white;
-          font-weight: 700;
-          text-transform: uppercase;
-          font-size: 14px;
-          letter-spacing: 0.5px;
-          width: 15%;
-          position: relative;
-        }
-        
-        .day-header::after {
-          content: '';
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 2px;
-          height: 60%;
-          background: rgba(255,255,255,0.3);
-        }
-        
-        .meal-cell {
-          width: 28.33%;
-          padding: 16px;
-          background: white;
-        }
-        
-        .meal-card {
           padding: 12px;
-          background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-          border-radius: 8px;
-          border: 1px solid #d1fae5;
-          transition: all 0.2s ease;
+          text-align: left;
+          font-weight: 600;
+          font-size: 13px;
         }
         
-        .meal-card:hover {
-          transform: scale(1.02);
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        td {
+          padding: 12px;
+          border: 1px solid #e2e8f0;
+          vertical-align: top;
+        }
+        
+        .day-cell {
+          background: #f0fdf4;
+          font-weight: 600;
+          color: #10b981;
+          width: 12%;
         }
         
         .meal-name {
-          font-weight: 700;
-          color: #1e293b;
+          font-weight: 600;
+          color: #2d3748;
+          margin-bottom: 4px;
+        }
+        
+        .calories {
+          color: #10b981;
+          font-size: 12px;
+          font-weight: 600;
+        }
+        
+        .page-break {
+          page-break-before: always;
+        }
+        
+        .tips-page {
+          margin-top: 40px;
+        }
+        
+        .tips-header {
+          text-align: center;
+          padding: 20px;
+          border-bottom: 3px solid #3b82f6;
+          margin-bottom: 30px;
+        }
+        
+        .tips-header h2 {
+          font-size: 28px;
+          color: #3b82f6;
           margin-bottom: 8px;
-          font-size: 13px;
-          line-height: 1.4;
         }
         
-        .calories { 
-          display: inline-block;
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          color: white;
-          font-size: 11px;
-          font-weight: 700;
-          padding: 4px 10px;
-          border-radius: 20px;
-          margin-bottom: 8px;
-        }
-        
-        .recipe {
-          color: #64748b;
-          font-size: 10px;
-          line-height: 1.5;
-          margin-top: 8px;
-          padding-top: 8px;
-          border-top: 1px solid #e2e8f0;
-        }
-        
-        /* Tips Section */
         .tips-section {
-          background: white;
-          padding: 24px;
-          border-radius: 12px;
-          margin: 24px 0;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-          border-left: 4px solid #3b82f6;
+          margin-bottom: 30px;
         }
         
         .tips-section h3 {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          margin-bottom: 16px;
-          color: #1e293b;
+          color: #2d3748;
           font-size: 20px;
-          font-weight: 700;
+          margin-bottom: 15px;
+          padding-bottom: 8px;
+          border-bottom: 2px solid #e2e8f0;
         }
         
         .tips-section ul {
-          margin: 0;
-          padding-left: 24px;
-          color: #475569;
+          list-style: none;
+          padding: 0;
         }
         
         .tips-section li {
+          padding: 10px;
           margin-bottom: 10px;
-          font-size: 13px;
-          line-height: 1.6;
-        }
-        
-        .tips-section li::marker {
-          color: #10b981;
-          font-weight: bold;
-        }
-        
-        /* Personalized Tips */
-        .personalized-tips {
-          margin-top: 24px;
+          background: #f8fafc;
+          border-left: 4px solid #10b981;
+          border-radius: 4px;
         }
         
         .tip-item {
-          background: white;
-          border-left: 4px solid #10b981;
-          margin-bottom: 16px;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-          transition: all 0.3s ease;
-        }
-        
-        .tip-item:hover {
-          transform: translateX(4px);
-          box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
-        }
-        
-        .tip-header {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 8px;
-        }
-        
-        .tip-icon {
-          font-size: 32px;
-          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-        
-        .tip-category {
-          font-size: 10px;
-          color: #64748b;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-          font-weight: 700;
-          background: #f1f5f9;
-          padding: 4px 10px;
-          border-radius: 12px;
+          margin-bottom: 20px;
+          padding: 15px;
+          background: #f8fafc;
+          border-left: 4px solid #3b82f6;
+          border-radius: 4px;
         }
         
         .tip-title {
+          font-weight: 600;
+          color: #2d3748;
+          margin-bottom: 8px;
           font-size: 16px;
-          font-weight: 700;
-          color: #1e293b;
-          margin: 8px 0;
+        }
+        
+        .tip-category {
+          font-size: 11px;
+          color: #64748b;
+          text-transform: uppercase;
+          margin-bottom: 4px;
         }
         
         .tip-content {
-          font-size: 13px;
           color: #475569;
-          line-height: 1.7;
+          line-height: 1.6;
         }
         
-        /* Footer */
         .footer {
-          margin-top: 40px;
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 2px solid #e2e8f0;
           text-align: center;
-          padding: 24px;
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-          border-radius: 12px;
-          border: 1px solid #e2e8f0;
-        }
-        
-        .footer-logo {
-          font-size: 24px;
-          font-weight: 700;
-          color: #10b981;
-          margin-bottom: 12px;
-        }
-        
-        .footer-text {
           color: #64748b;
           font-size: 12px;
-          line-height: 1.8;
         }
         
-        .footer-copyright {
-          margin-top: 12px;
-          font-weight: 600;
-          color: #475569;
-          font-size: 11px;
-        }
-        
-        /* Print Styles */
         @media print {
-          body { 
-            margin: 0; 
-            padding: 0;
-            background: white;
-          }
-          .container {
-            padding: 10px;
-          }
-          .header { 
-            page-break-after: avoid;
-            margin-bottom: 20px;
-          }
-          .meal-plan-section {
-            page-break-inside: avoid;
-          }
-          table { 
-            page-break-inside: avoid;
-          }
-          .tip-item {
-            page-break-inside: avoid;
-          }
+          body { margin: 0; padding: 10px; }
+          .page-break { page-break-before: always; }
+          table { page-break-inside: avoid; }
+          .tip-item { page-break-inside: avoid; }
         }
       </style>
     </head>
     <body>
-      <div class="container">
-        <!-- Header -->
-        <div class="header">
-          <div class="logo">
-            <span class="logo-icon">🌱</span>WellNest
-          </div>
-          <div class="title">Your Personalized Weekly Meal Plan</div>
-          <div class="subtitle">Scientifically crafted nutrition for optimal wellness</div>
+      <!-- Page 1: Meal Plan -->
+      <div class="header">
+        <h1>🌱 WellNest</h1>
+        <p>Your Personalized Weekly Meal Plan</p>
+      </div>
+
+      <div class="info-bar">
+        <div class="info-item">
+          <div class="info-label">Prepared For</div>
+          <div class="info-value" style="font-size: 16px; color: #2d3748;">${username}</div>
         </div>
-        
-        <!-- User Info -->
-        <div class="user-info-card">
-          <div class="info-item">
-            <span class="info-icon">👤</span>
-            <div class="info-content">
-              <div class="info-label">Prepared For</div>
-              <div class="info-value">${username}</div>
-            </div>
-          </div>
-          <div class="info-item">
-            <span class="info-icon">📅</span>
-            <div class="info-content">
-              <div class="info-label">Generated On</div>
-              <div class="info-value">${new Date().toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric' 
-              })}</div>
-            </div>
-          </div>
+        <div class="info-item">
+          <div class="info-label">Date</div>
+          <div class="info-value" style="font-size: 16px; color: #2d3748;">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
         </div>
-        
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-icon">🔥</span>
-            <div class="stat-value">${totalCalories.toLocaleString()}</div>
-            <div class="stat-label">Weekly Calories</div>
-          </div>
-          <div class="stat-card">
-            <span class="stat-icon">📊</span>
-            <div class="stat-value">${Math.round(totalCalories / 7).toLocaleString()}</div>
-            <div class="stat-label">Daily Average</div>
-          </div>
-          <div class="stat-card">
-            <span class="stat-icon">🍽️</span>
-            <div class="stat-value">21</div>
-            <div class="stat-label">Total Meals</div>
-          </div>
+        <div class="info-item">
+          <div class="info-label">Weekly Calories</div>
+          <div class="info-value">${totalCalories.toLocaleString()}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Daily Average</div>
+          <div class="info-value">${Math.round(totalCalories / 7).toLocaleString()}</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Day</th>
+            <th>🌅 Breakfast</th>
+            <th>🍽️ Lunch</th>
+            <th>🌙 Dinner</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${mealPlanRows}
+        </tbody>
+      </table>
+
+      <div class="footer">
+        Generated by WellNest AI Nutrition System | © 2025 WellNest | wellnest.sbs
+      </div>
+
+      <!-- Page 2: Tips & Recommendations -->
+      <div class="page-break"></div>
+      
+      <div class="tips-page">
+        <div class="tips-header">
+          <h2>💡 Your Nutrition Guide</h2>
+          <p>Tips & Recommendations</p>
         </div>
 
-        <!-- Meal Plan Section -->
-        <div class="meal-plan-section">
-          <h2 class="section-title">📅 Your Weekly Schedule</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Day</th>
-                <th>🌅 Breakfast</th>
-                <th>☀️ Lunch</th>
-                <th>🌙 Dinner</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${mealPlanRows}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- General Tips -->
         <div class="tips-section">
-          <h3>💡 Essential Guidelines</h3>
+          <h3>Essential Guidelines</h3>
           <ul>
-            <li>💧 <strong>Stay Hydrated:</strong> Drink 8-10 glasses of water throughout the day for optimal metabolism</li>
-            <li>⏰ <strong>Consistent Timing:</strong> Eat meals at regular intervals to regulate your body's metabolism</li>
-            <li>🔄 <strong>Flexibility:</strong> Feel free to swap similar meals within the same category based on your preferences</li>
-            <li>👂 <strong>Listen to Your Body:</strong> Adjust portion sizes based on your hunger levels and activity</li>
-            <li>🥗 <strong>Meal Prep:</strong> Prepare ingredients in advance on weekends to save time during busy weekdays</li>
+            <li><strong>Stay Hydrated:</strong> Drink 8-10 glasses of water throughout the day for optimal metabolism and digestion.</li>
+            <li><strong>Consistent Timing:</strong> Eat meals at regular intervals to regulate your body's metabolism and energy levels.</li>
+            <li><strong>Portion Control:</strong> Listen to your body and adjust portion sizes based on your hunger levels and daily activity.</li>
+            <li><strong>Meal Prep:</strong> Prepare ingredients in advance on weekends to save time during busy weekdays.</li>
+            <li><strong>Flexibility:</strong> Feel free to swap similar meals within the same category based on your preferences.</li>
           </ul>
         </div>
 
-        <!-- Personalized Tips -->
         ${personalizedTips.length > 0 ? `
-        <div class="personalized-tips">
-          <h2 class="section-title">🎯 Personalized Recommendations</h2>
+        <div class="tips-section">
+          <h3>Personalized Recommendations</h3>
           ${personalizedTips.map(tip => `
             <div class="tip-item">
-              <div class="tip-header">
-                <span class="tip-icon">${tip.icon}</span>
-                <span class="tip-category">${tip.category}</span>
-              </div>
-              <div class="tip-title">${tip.title}</div>
+              <div class="tip-category">${tip.category}</div>
+              <div class="tip-title">${tip.icon} ${tip.title}</div>
               <div class="tip-content">${tip.content}</div>
             </div>
           `).join('')}
         </div>
         ` : ''}
 
-        <!-- Footer -->
+        <div class="tips-section">
+          <h3>Quick Tips</h3>
+          <ul>
+            <li><strong>Pre-workout:</strong> Eat a light snack with carbs and protein 30-60 minutes before exercise.</li>
+            <li><strong>Post-workout:</strong> Consume protein within 30 minutes after exercise for muscle recovery.</li>
+            <li><strong>Snacking:</strong> Choose fruits, nuts, or yogurt for healthy snacks between meals.</li>
+            <li><strong>Sleep:</strong> Avoid heavy meals 2-3 hours before bedtime for better sleep quality.</li>
+            <li><strong>Variety:</strong> Try to include different colors of fruits and vegetables for diverse nutrients.</li>
+          </ul>
+        </div>
+
         <div class="footer">
-          <div class="footer-logo">🌱 WellNest</div>
-          <div class="footer-text">
-            This meal plan was generated by WellNest's AI-powered nutrition system<br>
-            For support or questions, visit <strong>wellnest.sbs</strong><br>
-            Consult with a healthcare professional before making significant dietary changes
-          </div>
-          <div class="footer-copyright">© 2025 WellNest. All rights reserved.</div>
+          For support, visit wellnest.sbs | Consult a healthcare professional before making significant dietary changes
         </div>
       </div>
     </body>

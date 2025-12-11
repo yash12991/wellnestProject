@@ -677,7 +677,7 @@ const MealPlanTable = () => {
     const totalCalories = getTotalCalories(mealPlan);
     const avgCalories = Math.round(totalCalories / 7);
 
-    // Create a printable version of the meal plan with beautiful design
+    // Create a printable version of the meal plan with simple, clean design
     const printWindow = window.open("", "_blank");
     const mealPlanHTML = `
       <!DOCTYPE html>
@@ -685,299 +685,266 @@ const MealPlanTable = () => {
       <head>
         <meta charset="UTF-8">
         <title>Weekly Meal Plan - ${username}</title>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
         <style>
-          @page { size: A4; margin: 0.5in; }
-          
+          @page { size: A4; margin: 0.75in; }
           * { margin: 0; padding: 0; box-sizing: border-box; }
           
           body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-            color: #1e293b;
-            line-height: 1.6;
-            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
+            color: #2d3748;
+            line-height: 1.5;
+            background: white;
           }
-          
-          .container { max-width: 1200px; margin: 0 auto; }
           
           .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 30px 20px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.3);
+            padding: 20px;
+            border-bottom: 3px solid #10b981;
+            margin-bottom: 20px;
           }
           
-          .logo {
-            font-size: 48px;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            letter-spacing: -1px;
+          .header h1 {
+            font-size: 32px;
+            color: #10b981;
+            margin-bottom: 8px;
           }
           
-          .title { 
-            font-size: 28px;
-            color: white;
-            margin: 10px 0;
-            font-weight: 600;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+          .header p {
+            color: #64748b;
+            font-size: 14px;
+            margin: 4px 0;
           }
           
-          .subtitle {
-            color: rgba(255,255,255,0.95);
-            font-size: 16px;
-            margin-top: 8px;
-            font-weight: 400;
-          }
-          
-          .user-info-card {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            margin: 20px 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+          .info-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 20px;
             border: 1px solid #e2e8f0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
           }
           
-          .info-item { display: flex; align-items: center; gap: 12px; }
-          .info-icon { font-size: 32px; }
+          .info-item {
+            text-align: center;
+            flex: 1;
+          }
+          
           .info-label {
             font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
             color: #64748b;
+            text-transform: uppercase;
             font-weight: 600;
-            margin-bottom: 4px;
-          }
-          .info-value { font-size: 16px; font-weight: 600; color: #1e293b; }
-          
-          .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin: 24px 0;
-          }
-          
-          .stat-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid #e2e8f0;
-          }
-          
-          .stat-icon { font-size: 40px; margin-bottom: 8px; display: block; }
-          .stat-value { font-size: 28px; font-weight: 700; color: #10b981; margin-bottom: 4px; }
-          .stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
-          
-          .section-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 32px 0 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-          }
-          
-          .section-title::before {
-            content: '';
-            width: 4px;
-            height: 32px;
-            background: linear-gradient(180deg, #10b981 0%, #059669 100%);
-            border-radius: 2px;
-          }
-          
-          table { 
-            width: 100%; 
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 16px 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-          }
-          
-          th, td { 
-            padding: 16px 14px;
-            text-align: left; 
-            vertical-align: top;
-            border-bottom: 1px solid #e2e8f0;
-          }
-          
-          th { 
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            font-weight: 700;
-            color: #1e293b;
-            font-size: 13px;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
           }
           
-          tr:last-child td { border-bottom: none; }
+          .info-value {
+            font-size: 20px;
+            color: #10b981;
+            font-weight: 700;
+            margin-top: 4px;
+          }
           
-          .day-header { 
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+          }
+          
+          th {
+            background: #10b981;
             color: white;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 0.5px;
-            width: 15%;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
           }
           
-          .meal-cell { width: 28.33%; padding: 16px; background: white; }
-          
-          .meal-card {
+          td {
             padding: 12px;
-            background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-            border-radius: 8px;
-            border: 1px solid #d1fae5;
+            border: 1px solid #e2e8f0;
+            vertical-align: top;
+          }
+          
+          .day-cell {
+            background: #f0fdf4;
+            font-weight: 600;
+            color: #10b981;
+            width: 12%;
           }
           
           .meal-name {
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
-            font-size: 13px;
-            line-height: 1.4;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
           }
           
-          .calories { 
-            display: inline-block;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
+          .calories {
+            color: #10b981;
+            font-size: 12px;
+            font-weight: 600;
+          }
+          
+          .page-break {
+            page-break-before: always;
+          }
+          
+          .tips-page {
+            margin-top: 40px;
+          }
+          
+          .tips-header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 3px solid #3b82f6;
+            margin-bottom: 30px;
+          }
+          
+          .tips-header h2 {
+            font-size: 28px;
+            color: #3b82f6;
             margin-bottom: 8px;
+          }
+          
+          .tips-section {
+            margin-bottom: 30px;
+          }
+          
+          .tips-section h3 {
+            color: #2d3748;
+            font-size: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+          }
+          
+          .tips-section ul {
+            list-style: none;
+            padding: 0;
+          }
+          
+          .tips-section li {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border-left: 4px solid #10b981;
+            border-radius: 4px;
           }
           
           .footer {
-            margin-top: 40px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
             text-align: center;
-            padding: 24px;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
           }
           
-          .footer-logo { font-size: 24px; font-weight: 700; color: #10b981; margin-bottom: 12px; }
-          .footer-text { color: #64748b; font-size: 12px; line-height: 1.8; }
-          .footer-copyright { margin-top: 12px; font-weight: 600; color: #475569; font-size: 11px; }
-          
           @media print {
-            body { margin: 0; padding: 0; background: white; }
-            .header { page-break-after: avoid; }
+            body { margin: 0; padding: 10px; }
+            .page-break { page-break-before: always; }
             table { page-break-inside: avoid; }
           }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <div class="logo">🌱 WellNest</div>
-            <div class="title">Your Personalized Weekly Meal Plan</div>
-            <div class="subtitle">Scientifically crafted nutrition for optimal wellness</div>
+        <!-- Page 1: Meal Plan -->
+        <div class="header">
+          <h1>🌱 WellNest</h1>
+          <p>Your Personalized Weekly Meal Plan</p>
+        </div>
+
+        <div class="info-bar">
+          <div class="info-item">
+            <div class="info-label">Prepared For</div>
+            <div class="info-value" style="font-size: 16px; color: #2d3748;">${username}</div>
           </div>
-          
-          <div class="user-info-card">
-            <div class="info-item">
-              <span class="info-icon">👤</span>
-              <div class="info-content">
-                <div class="info-label">Prepared For</div>
-                <div class="info-value">${username}</div>
-              </div>
-            </div>
-            <div class="info-item">
-              <span class="info-icon">📅</span>
-              <div class="info-content">
-                <div class="info-label">Generated On</div>
-                <div class="info-value">${new Date().toLocaleDateString('en-US', { 
-                  month: 'short', 
-                  day: 'numeric', 
-                  year: 'numeric' 
-                })}</div>
-              </div>
-            </div>
+          <div class="info-item">
+            <div class="info-label">Date</div>
+            <div class="info-value" style="font-size: 16px; color: #2d3748;">${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</div>
           </div>
-          
-          <div class="stats-grid">
-            <div class="stat-card">
-              <span class="stat-icon">🔥</span>
-              <div class="stat-value">${totalCalories.toLocaleString()}</div>
-              <div class="stat-label">Weekly Calories</div>
-            </div>
-            <div class="stat-card">
-              <span class="stat-icon">📊</span>
-              <div class="stat-value">${avgCalories.toLocaleString()}</div>
-              <div class="stat-label">Daily Average</div>
-            </div>
-            <div class="stat-card">
-              <span class="stat-icon">🍽️</span>
-              <div class="stat-value">21</div>
-              <div class="stat-label">Total Meals</div>
-            </div>
+          <div class="info-item">
+            <div class="info-label">Weekly Calories</div>
+            <div class="info-value">${totalCalories.toLocaleString()}</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Daily Average</div>
+            <div class="info-value">${avgCalories.toLocaleString()}</div>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>🌅 Breakfast</th>
+              <th>🍽️ Lunch</th>
+              <th>🌙 Dinner</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${dayNames.map((day) => {
+              const entry = mealPlan.find((d) => d.day === day) || {};
+              return \`
+                <tr>
+                  <td class="day-cell">\${day.charAt(0).toUpperCase() + day.slice(1)}</td>
+                  <td>
+                    <div class="meal-name">\${entry.breakfast?.dish || "No meal planned"}</div>
+                    \${entry.breakfast?.calories ? \`<div class="calories">\${entry.breakfast.calories} kcal</div>\` : ""}
+                  </td>
+                  <td>
+                    <div class="meal-name">\${entry.lunch?.dish || "No meal planned"}</div>
+                    \${entry.lunch?.calories ? \`<div class="calories">\${entry.lunch.calories} kcal</div>\` : ""}
+                  </td>
+                  <td>
+                    <div class="meal-name">\${entry.dinner?.dish || "No meal planned"}</div>
+                    \${entry.dinner?.calories ? \`<div class="calories">\${entry.dinner.calories} kcal</div>\` : ""}
+                  </td>
+                </tr>
+              \`;
+            }).join("")}
+          </tbody>
+        </table>
+
+        <div class="footer">
+          Generated by WellNest AI Nutrition System | © 2025 WellNest | wellnest.sbs
+        </div>
+
+        <!-- Page 2: Tips & Recommendations -->
+        <div class="page-break"></div>
+        
+        <div class="tips-page">
+          <div class="tips-header">
+            <h2>💡 Your Nutrition Guide</h2>
+            <p>Tips & Recommendations</p>
           </div>
 
-          <h2 class="section-title">📅 Your Weekly Schedule</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Day</th>
-                <th>🌅 Breakfast</th>
-                <th>☀️ Lunch</th>
-                <th>🌙 Dinner</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${dayNames
-                .map((day) => {
-                  const entry = mealPlan.find((d) => d.day === day) || {};
-                  return `
-                  <tr>
-                    <td class="day-header">${day.charAt(0).toUpperCase() + day.slice(1)}</td>
-                    <td class="meal-cell">
-                      <div class="meal-card">
-                        <div class="meal-name">${entry.breakfast?.dish || "No meal planned"}</div>
-                        ${entry.breakfast?.calories ? `<span class="calories">${entry.breakfast.calories} kcal</span>` : ""}
-                      </div>
-                    </td>
-                    <td class="meal-cell">
-                      <div class="meal-card">
-                        <div class="meal-name">${entry.lunch?.dish || "No meal planned"}</div>
-                        ${entry.lunch?.calories ? `<span class="calories">${entry.lunch.calories} kcal</span>` : ""}
-                      </div>
-                    </td>
-                    <td class="meal-cell">
-                      <div class="meal-card">
-                        <div class="meal-name">${entry.dinner?.dish || "No meal planned"}</div>
-                        ${entry.dinner?.calories ? `<span class="calories">${entry.dinner.calories} kcal</span>` : ""}
-                      </div>
-                    </td>
-                  </tr>
-                `;
-                })
-                .join("")}
-            </tbody>
-          </table>
+          <div class="tips-section">
+            <h3>Essential Guidelines</h3>
+            <ul>
+              <li><strong>Stay Hydrated:</strong> Drink 8-10 glasses of water throughout the day for optimal metabolism and digestion.</li>
+              <li><strong>Consistent Timing:</strong> Eat meals at regular intervals to regulate your body's metabolism and energy levels.</li>
+              <li><strong>Portion Control:</strong> Listen to your body and adjust portion sizes based on your hunger levels and daily activity.</li>
+              <li><strong>Meal Prep:</strong> Prepare ingredients in advance on weekends to save time during busy weekdays.</li>
+              <li><strong>Flexibility:</strong> Feel free to swap similar meals within the same category based on your preferences.</li>
+            </ul>
+          </div>
+
+          <div class="tips-section">
+            <h3>Quick Tips</h3>
+            <ul>
+              <li><strong>Pre-workout:</strong> Eat a light snack with carbs and protein 30-60 minutes before exercise.</li>
+              <li><strong>Post-workout:</strong> Consume protein within 30 minutes after exercise for muscle recovery.</li>
+              <li><strong>Snacking:</strong> Choose fruits, nuts, or yogurt for healthy snacks between meals.</li>
+              <li><strong>Sleep:</strong> Avoid heavy meals 2-3 hours before bedtime for better sleep quality.</li>
+              <li><strong>Variety:</strong> Try to include different colors of fruits and vegetables for diverse nutrients.</li>
+            </ul>
+          </div>
 
           <div class="footer">
-            <div class="footer-logo">🌱 WellNest</div>
-            <div class="footer-text">
-              This meal plan was generated by WellNest's AI-powered nutrition system<br>
-              For support or questions, visit <strong>wellnest.sbs</strong>
-            </div>
-            <div class="footer-copyright">© 2025 WellNest. All rights reserved.</div>
+            For support, visit wellnest.sbs | Consult a healthcare professional before making significant dietary changes
           </div>
         </div>
       </body>
