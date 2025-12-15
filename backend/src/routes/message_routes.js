@@ -158,20 +158,38 @@ RESTRICTIONS & ALLERGIES:
 - Food Allergies: ${userContext.allergies.join(", ") || "none"}
 
 PERSONALIZATION REQUIREMENTS:
-1. PROTEIN VARIETY: Use proteins from the available list: ${Array.isArray(userContext.proteinVariety) ? userContext.proteinVariety.join(", ") : userContext.proteinVariety}
-2. DAY-SPECIFIC RULES: ${userContext.specificDayPreferences !== "None" ? `STRICTLY follow these day-specific preferences: ${userContext.specificDayPreferences}` : "Rotate proteins throughout the week for variety"}
-3. VARIETY IS KEY: DO NOT repeat the same protein source on consecutive days unless specifically requested
-4. Align with activity level - Higher calories and protein for "Heavy" activity, moderate for "Light"
-5. Target specific health goals - energy-boosting foods for "More energy", digestive-friendly for digestion goals
-6. Consider craving patterns - if user craves sweets/carbs, include healthier alternatives
-7. Account for digestive issues - avoid spicy/heavy foods if user has frequent digestive upset
-8. Time energy dips - provide energy-boosting meals before user's fatigue time
-9. Respect medical conditions - diabetic-friendly if diabetic, heart-healthy if cardiac issues
-10. NEVER include foods from "Foods to Avoid" list
-11. STRICTLY avoid all listed allergies
-12. Consider additional preferences for meal variety and satisfaction
-13. IMPORTANT: Create VARIETY and DIFFERENT meals each time - avoid repeating the same dishes
-14. Use diverse Indian regional cuisines and cooking methods for maximum variety
+
+⚠️ CRITICAL VARIETY RULES - READ CAREFULLY:
+1. MAXIMUM DIVERSITY: If user selects "Dal" or any protein, DO NOT serve it every single day
+   - Use the selected protein 2-3 times MAX across the entire week
+   - Example: If Dal is selected, include Moong Dal (Monday), Masoor Dal (Thursday) and use OTHER proteins for remaining days
+   
+2. PROTEIN ROTATION: Use proteins from available list: ${Array.isArray(userContext.proteinVariety) ? userContext.proteinVariety.join(", ") : userContext.proteinVariety}
+   - Rotate DIFFERENT protein sources throughout the week
+   - Never repeat the same base protein on consecutive days
+   - Include vegetables, paneer, eggs, yogurt, legumes for variety
+   
+3. DAY-SPECIFIC RULES: ${userContext.specificDayPreferences !== "None" ? `Follow these day preferences: ${userContext.specificDayPreferences}` : "Create maximum variety across all 7 days"}
+
+4. DISH VARIETY: DO NOT repeat similar dishes or preparations
+   - If Monday has "Palak Paneer", don't serve "Paneer Tikka" on Tuesday
+   - Use completely different cuisines and cooking methods each day
+   - Balance across regions: North Indian, South Indian, Bengali, Gujarati, etc.
+
+5. MEAL TYPE DIVERSITY: Each breakfast/lunch/dinner should be DISTINCT
+   - Don't serve "Idli" for breakfast multiple times in one week
+   - Vary between roti-based, rice-based, and bread-based meals
+   - Include variety: curries, grilled, steamed, baked, stir-fried
+
+6. Align with activity level - Higher calories and protein for "Heavy" activity, moderate for "Light"
+7. Target health goals - energy-boosting foods for "More energy", digestive-friendly for digestion goals
+8. Consider cravings - if user craves sweets/carbs, include healthier alternatives 2-3 times weekly
+9. Account for digestive issues - avoid spicy/heavy foods if frequent digestive upset
+10. Time energy dips - provide energy-boosting meals before user's fatigue time
+11. Respect medical conditions - diabetic-friendly if diabetic, heart-healthy if cardiac issues
+12. NEVER include foods from "Foods to Avoid" list
+13. STRICTLY avoid all listed allergies
+14. Consider additional preferences for satisfaction
 
 TECHNICAL REQUIREMENTS:
 1. Output STRICT JSON with structure:
