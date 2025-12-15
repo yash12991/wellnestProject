@@ -90,11 +90,78 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to Wellnest API' });
 });
 
-// Simple DB health endpoint
+// Health Check Endpoint for Uptime Robot
+app.get('/health', async (req, res) => {
+  try {
+    const healthcheck = {
+      status: 'UP',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      service: 'WellNest API',
+      version: '1.0.0',
+      checks: {}
+    };
+
+    // Check MongoDB connection
+    const dbStateNames = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+    const dbState = mongoose.connection?.readyState ?? 0;
+    const dbStatus = dbStateNames[dbState] || String(dbState);
+    
+    healthcheck.checks.database = {
+      status: dbState === 1 ? 'UP' : 'DOWN',
+      state: dbStatus,
+      responseTime: null
+    };
+
+    // Test database with ping
+    if (dbState === 1) {
+      const startTime = Date.now();
+      try {
+        await mongoose.connection.db.admin().ping();
+        healthcheck.checks.database.responseTime = `${Date.now() - startTime}ms`;
+      } catch (dbError) {
+        healthcheck.checks.database.status = 'DOWN';
+        healthcheck.checks.database.error = dbError.message;
+      }
+    }
+
+    // Check memory usage
+    const memUsage = process.memoryUsage();
+    healthcheck.checks.memory = {
+      status: 'UP',
+      heapUsed: `${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`,
+      heapTotal: `${Math.round(memUsage.heapTotal / 1024 / 1024)}MB`,
+      rss: `${Math.round(memUsage.rss / 1024 / 1024)}MB`
+    };
+
+    // Overall status
+    const allChecksUp = Object.values(healthcheck.checks).every(check => check.status === 'UP');
+    healthcheck.status = allChecksUp ? 'UP' : 'DEGRADED';
+
+    // Return appropriate status code
+    const statusCode = allChecksUp ? 200 : 503;
+    res.status(statusCode).json(healthcheck);
+
+  } catch (error) {
+    console.error('Health check error:', error);
+    res.status(503).json({
+      status: 'DOWN',
+      timestamp: new Date().toISOString(),
+      error: error.message
+    });
+  }
+});
+
+// Simple DB health endpoint (kept for backward compatibility)
 app.get('/health/db', (_req, res) => {
   const stateNames = ['disconnected', 'connected', 'connecting', 'disconnecting'];
   const state = mongoose.connection?.readyState ?? 0;
   res.json({ status: stateNames[state] || String(state) });
+});
+
+// Quick ping endpoint for simple uptime checks
+app.get('/ping', (_req, res) => {
+  res.status(200).send('pong');
 });
 
 // API Routes
