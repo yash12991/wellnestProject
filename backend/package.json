@@ -7,8 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "jest",
-    "postinstall": "echo 'Checking Puppeteer...' && (node -e \"try { const p = require('puppeteer'); console.log('Puppeteer OK'); } catch(e) { console.log('Puppeteer not found, will use fallback'); }\" || true)"
+    "test": "jest"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
@@ -27,7 +26,7 @@
     "nodemailer": "^7.0.6",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "puppeteer": "^24.15.0",
+    "pdfkit": "^0.17.2",
     "resend": "^6.2.2",
     "serverless-http": "^3.0.0",
     "stripe": "^19.1.0"

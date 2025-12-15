@@ -259,7 +259,7 @@ export const sendMealPlanEmail = async (email, username, mealPlan) => {
                             <p style="color: #374151; font-size: 15px; margin-bottom: 20px; line-height: 1.6;">
                                 Track your progress, log meals, and get personalized recommendations in your WellNest dashboard.
                             </p>
-                            <a href="https://wellnest.com/dashboard" style="background: linear-gradient(135deg, #05d8a7, #059669); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 6px rgba(5, 216, 167, 0.2); transition: all 0.2s;">
+                            <a href="https://wellnest.sbs/dashboard" style="background: linear-gradient(135deg, #05d8a7, #059669); color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block; box-shadow: 0 4px 6px rgba(5, 216, 167, 0.2); transition: all 0.2s;">
                                 🎯 Open Dashboard
                             </a>
                         </div>
