@@ -742,116 +742,109 @@ export const generateMealPlanPDF = async (username, mealPlan) => {
       // PAGE 1: GUIDELINES & INTRODUCTION
       // ============================================
       
-      // Header with gradient effect (simulated with layered rectangles)
-      doc.rect(0, 0, 612, 140).fill('#018940');
-      doc.rect(0, 120, 612, 20).fillOpacity(0.7).fill('#05d8a7').fillOpacity(1);
+      // Header with solid green background
+      doc.rect(0, 0, 612, 120).fill('#018940');
       
       // Main Title
-      doc.fillColor('#ffffff').fontSize(36).font('Helvetica-Bold')
-         .text('WellNest', 50, 35, { align: 'center' });
+      doc.fillColor('#ffffff').fontSize(42).font('Helvetica-Bold')
+         .text('WellNest', 50, 30, { align: 'center' });
       
-      doc.fontSize(18).fillColor('#e8f9f1').font('Helvetica')
-         .text('Your Personalized Nutrition Journey', 50, 75, { align: 'center' });
+      doc.fontSize(16).fillColor('#e8f9f1').font('Helvetica')
+         .text('Your Personalized Nutrition Journey', 50, 80, { align: 'center' });
       
-      doc.fontSize(12).fillColor('#ffffff').font('Helvetica')
-         .text('AI-Powered Meal Planning & Customization', 50, 100, { align: 'center' });
+      // User info box with clean design
+      doc.roundedRect(70, 150, 455, 90, 8).fillAndStroke('#f8fffe', '#018940');
       
-      // User info box
-      doc.moveDown(4);
-      doc.roundedRect(50, 170, 495, 70, 8).fillAndStroke('#f0fdf4', '#018940');
-      
-      doc.fillColor('#018940').fontSize(16).font('Helvetica-Bold')
-         .text(`👤 Welcome, ${username}!`, 70, 185);
+      doc.fillColor('#018940').fontSize(18).font('Helvetica-Bold')
+         .text(`Welcome, ${username}!`, 90, 170);
       
       doc.fillColor('#666666').fontSize(11).font('Helvetica')
-         .text(`📅 Generated: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, 70, 210);
+         .text(`Generated: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, 90, 195);
       
-      doc.text(`🔥 Weekly Goal: ${totalCalories.toLocaleString()} kcal | Daily Average: ${avgDailyCalories.toLocaleString()} kcal`, 70, 225);
+      doc.fillColor('#018940').fontSize(11).font('Helvetica-Bold')
+         .text(`Weekly Goal: ${totalCalories.toLocaleString()} kcal`, 90, 212);
+      doc.fillColor('#666666').fontSize(10).font('Helvetica')
+         .text(`Daily Average: ${avgDailyCalories.toLocaleString()} kcal/day`, 90, 227);
       
       // Guidelines Section Title
-      doc.moveDown(3);
-      doc.fillColor('#018940').fontSize(22).font('Helvetica-Bold')
-         .text('📋 How to Use Your Personalized Meal Plan', 50, 270);
+      doc.fillColor('#018940').fontSize(24).font('Helvetica-Bold')
+         .text('How to Use Your Meal Plan', 70, 270);
       
-      doc.moveDown(0.5);
-      doc.strokeColor('#05d8a7').lineWidth(3)
-         .moveTo(50, doc.y).lineTo(545, doc.y).stroke();
+      // Decorative line
+      doc.strokeColor('#05d8a7').lineWidth(2)
+         .moveTo(70, 300).lineTo(525, 300).stroke();
       
-      doc.moveDown(1);
-      
-      // Guidelines with beautiful boxes
+      // Guidelines with clean numbered design
       const guidelines = [
         {
-          icon: '🤖',
+          number: '1',
           title: 'Customize with AI Chat',
-          text: 'Use our intelligent AI assistant to modify any meal instantly. Ask for substitutions, dietary adjustments, or recipe variations tailored to your preferences and allergies.'
+          text: 'Use our intelligent AI assistant to modify any meal instantly. Ask for substitutions, dietary adjustments, or recipe variations.'
         },
         {
-          icon: '📱',
+          number: '2',
           title: 'Track & Monitor Progress',
-          text: 'Log your meals in the app to track calories, macros, and nutrition. Get real-time insights and personalized recommendations based on your goals.'
+          text: 'Log your meals in the app to track calories, macros, and nutrition. Get real-time insights and personalized recommendations.'
         },
         {
-          icon: '🔄',
+          number: '3',
           title: 'Flexible Meal Swaps',
-          text: 'Don\'t like a meal? Swap it! Our AI suggests healthy alternatives that match your calorie targets and nutritional requirements seamlessly.'
+          text: 'Don\'t like a meal? Swap it! Our AI suggests healthy alternatives that match your calorie targets seamlessly.'
         },
         {
-          icon: '💧',
-          title: 'Hydration Reminder',
-          text: 'Drink 8-10 glasses of water daily. Set up hydration reminders on your WellNest dashboard to stay on track throughout the day.'
+          number: '4',
+          title: 'Stay Hydrated',
+          text: 'Drink 8-10 glasses of water daily. Set up hydration reminders on your WellNest dashboard to stay on track.'
         },
         {
-          icon: '⏰',
-          title: 'Optimal Meal Timing',
-          text: 'Eat at consistent times daily. Space meals 3-4 hours apart for better digestion and sustained energy levels throughout your day.'
+          number: '5',
+          title: 'Consistent Meal Timing',
+          text: 'Eat at consistent times daily. Space meals 3-4 hours apart for better digestion and sustained energy levels.'
         },
         {
-          icon: '📊',
-          title: 'Weekly Review & Adapt',
-          text: 'Check your progress dashboard weekly. Our AI learns from your eating patterns and preferences to continuously improve your meal plans.'
+          number: '6',
+          title: 'Review & Adapt Weekly',
+          text: 'Check your progress dashboard weekly. Our AI learns from your patterns to continuously improve your meal plans.'
         }
       ];
       
       let yPos = 320;
       guidelines.forEach((guide, idx) => {
-        // Alternating colored boxes for visual appeal
-        const bgColor = idx % 2 === 0 ? '#f0fdf4' : '#e8f9f1';
-        const borderColor = idx % 2 === 0 ? '#05d8a7' : '#018940';
+        // Alternating background colors
+        const bgColor = idx % 2 === 0 ? '#ffffff' : '#f8fffe';
         
-        doc.roundedRect(50, yPos, 495, 55, 5).fillAndStroke(bgColor, borderColor);
+        doc.roundedRect(70, yPos, 455, 50, 5).fill(bgColor);
         
-        // Icon circle
-        doc.circle(75, yPos + 27, 18).fill('#018940');
-        doc.fillColor('#ffffff').fontSize(18).text(guide.icon, 65, yPos + 16);
+        // Number circle
+        doc.circle(95, yPos + 25, 15).fillAndStroke('#018940', '#05d8a7');
+        doc.fillColor('#ffffff').fontSize(14).font('Helvetica-Bold')
+           .text(guide.number, 90, yPos + 17);
         
         // Title
         doc.fillColor('#018940').fontSize(13).font('Helvetica-Bold')
-           .text(guide.title, 110, yPos + 12, { width: 420 });
+           .text(guide.title, 125, yPos + 10, { width: 385 });
         
         // Description text
-        doc.fillColor('#333333').fontSize(9.5).font('Helvetica')
-           .text(guide.text, 110, yPos + 28, { width: 420, lineGap: 2 });
+        doc.fillColor('#333333').fontSize(9).font('Helvetica')
+           .text(guide.text, 125, yPos + 27, { width: 385, lineGap: 1 });
         
-        yPos += 63;
+        yPos += 58;
       });
       
-      // Footer with dashboard link
-      doc.fillColor('#018940').fontSize(11).font('Helvetica-Bold')
-         .text('🌐 Access Your Dashboard:', 50, 730, { align: 'center' });
+      // Dashboard CTA box
+      doc.roundedRect(70, 685, 455, 70, 8).fillAndStroke('#e8f9f1', '#018940');
       
-      doc.fillColor('#05d8a7').fontSize(13).font('Helvetica-Bold')
-         .text('wellnest.sbs/dashboard', 50, 745, { 
-           align: 'center',
+      doc.fillColor('#018940').fontSize(12).font('Helvetica-Bold')
+         .text('Access Your Dashboard', 90, 700);
+      
+      doc.fillColor('#05d8a7').fontSize(14).font('Helvetica-Bold')
+         .text('wellnest.sbs/dashboard', 90, 720, { 
            underline: true,
            link: 'https://wellnest.sbs/dashboard'
          });
       
-      doc.fillColor('#666666').fontSize(9).font('Helvetica-Oblique')
-         .text('Customize your meals, track nutrition, and chat with AI for instant adjustments', 50, 765, { 
-           align: 'center',
-           width: 495
-         });
+      doc.fillColor('#666666').fontSize(9).font('Helvetica')
+         .text('Customize meals, track nutrition, and chat with AI', 90, 738);
       
       // ============================================
       // PAGE 2: MEAL PLAN DETAILS
@@ -859,120 +852,137 @@ export const generateMealPlanPDF = async (username, mealPlan) => {
       doc.addPage();
       
       // Page 2 Header
-      addTitle('🍽️ YOUR 7-DAY MEAL SCHEDULE', 26, '#018940');
-      doc.moveDown(0.5);
-      addSubtitle('Personalized Nutrition for Your Wellness Journey', 12, '#05d8a7');
-      doc.moveDown(2);
+      doc.rect(0, 0, 612, 80).fill('#018940');
+      doc.fillColor('#ffffff').fontSize(28).font('Helvetica-Bold')
+         .text('YOUR 7-DAY MEAL SCHEDULE', 50, 25, { align: 'center' });
+      doc.fontSize(12).fillColor('#e8f9f1').font('Helvetica')
+         .text(`${username} | Week of ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`, 50, 55, { align: 'center' });
       
-      // User Info Box
-      doc.roundedRect(50, doc.y, 495, 80, 5).fill('#f0fdf4');
-      doc.fillColor('#018940').fontSize(16).font('Helvetica-Bold')
-         .text(`👤 ${username}`, 70, doc.y - 60);
-      doc.fillColor('#666666').fontSize(11).font('Helvetica')
-         .text(`📅 Generated: ${new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`, 70);
-      doc.text(`🔥 Total Weekly Calories: ${totalCalories.toLocaleString()} kcal`, 70);
-      doc.text(`📊 Average Daily: ${avgDailyCalories.toLocaleString()} kcal/day`, 70);
+      doc.moveDown(4);
+      
+      // Summary box
+      doc.roundedRect(70, 105, 455, 45, 5).fillAndStroke('#f8fffe', '#018940');
+      doc.fillColor('#018940').fontSize(11).font('Helvetica-Bold')
+         .text(`Total Weekly Calories: ${totalCalories.toLocaleString()} kcal`, 90, 118);
+      doc.fillColor('#666666').fontSize(10).font('Helvetica')
+         .text(`Average Daily: ${avgDailyCalories.toLocaleString()} kcal/day`, 90, 135);
+      
       doc.moveDown(3);
-      
-      // Meal Plan Table
-      addSectionTitle('📋 YOUR 7-DAY MEAL SCHEDULE');
-      doc.moveDown(0.5);
       
       const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
       const dayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
       
       dayNames.forEach((dayName, index) => {
         // Check if we need a new page
-        if (doc.y > 700) {
+        if (doc.y > 680) {
           doc.addPage();
+          doc.moveDown(2);
         }
         
         const dayData = mealPlan.find(d => d.day === dayName) || {};
         
-        // Day Header
-        doc.roundedRect(50, doc.y, 495, 30, 3).fill('#018940');
-        doc.fillColor('#ffffff').fontSize(14).font('Helvetica-Bold')
-           .text(`${dayLabels[index].toUpperCase()}`, 60, doc.y - 22);
-        doc.moveDown(1.5);
+        // Day Header with clean design
+        doc.roundedRect(70, doc.y, 455, 25, 3).fill('#018940');
+        doc.fillColor('#ffffff').fontSize(13).font('Helvetica-Bold')
+           .text(dayLabels[index].toUpperCase(), 85, doc.y - 18);
+        doc.moveDown(1.3);
         
-        // Breakfast
-        const formatMeal = (meal, emoji, mealType) => {
+        // Meal formatting function
+        const formatMeal = (meal, mealType, mealLabel) => {
+          const mealY = doc.y;
+          
+          // Meal type label
+          doc.fillColor('#018940').fontSize(10).font('Helvetica-Bold')
+             .text(mealLabel, 85, mealY);
+          
           if (!meal || (!meal.dish && !meal.calories)) {
-            doc.fillColor('#999999').fontSize(10).font('Helvetica-Oblique')
-               .text(`${emoji} ${mealType}: No meal planned`, 60);
+            doc.fillColor('#999999').fontSize(9).font('Helvetica-Oblique')
+               .text('No meal planned', 85, mealY + 14);
           } else {
-            doc.fillColor('#333333').fontSize(11).font('Helvetica-Bold')
-               .text(`${emoji} ${mealType}:`, 60);
             doc.fillColor('#333333').fontSize(10).font('Helvetica')
-               .text(`${meal.dish || 'Meal planned'}`, 60);
+               .text(meal.dish || 'Meal planned', 85, mealY + 14, { width: 350 });
             if (meal.calories > 0) {
               doc.fillColor('#05d8a7').fontSize(9).font('Helvetica-Bold')
-                 .text(`${meal.calories} kcal`, 60);
+                 .text(`${meal.calories} kcal`, 450, mealY + 14);
             }
           }
-          doc.moveDown(0.3);
+          doc.moveDown(1.4);
         };
         
-        formatMeal(dayData.breakfast, '🌅', 'Breakfast');
-        formatMeal(dayData.lunch, '🥗', 'Lunch');
-        formatMeal(dayData.dinner, '🍽️', 'Dinner');
+        formatMeal(dayData.breakfast, 'breakfast', 'BREAKFAST');
+        formatMeal(dayData.lunch, 'lunch', 'LUNCH');
+        formatMeal(dayData.dinner, 'dinner', 'DINNER');
         
         // Day Total
         const dayTotal = (dayData.breakfast?.calories || 0) + (dayData.lunch?.calories || 0) + (dayData.dinner?.calories || 0);
         if (dayTotal > 0) {
           doc.fillColor('#018940').fontSize(10).font('Helvetica-Bold')
-             .text(`Daily Total: ${dayTotal} kcal`, 60);
+             .text(`Daily Total: ${dayTotal} kcal`, 85, doc.y);
         }
         
-        doc.moveDown(1);
+        doc.moveDown(0.8);
         // Separator line
-        doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke('#e5e7eb');
-        doc.moveDown(0.5);
+        doc.strokeColor('#e5e7eb').lineWidth(1)
+           .moveTo(70, doc.y).lineTo(525, doc.y).stroke();
+        doc.moveDown(0.8);
       });
       
       // New page for tips
       doc.addPage();
       
-      // Personalized Tips Section
-      addSectionTitle('💡 PERSONALIZED NUTRITION TIPS');
-      doc.moveDown(0.5);
+      // Personalized Tips Section Header
+      doc.rect(0, 0, 612, 60).fill('#018940');
+      doc.fillColor('#ffffff').fontSize(22).font('Helvetica-Bold')
+         .text('PERSONALIZED NUTRITION TIPS', 50, 20, { align: 'center' });
+      
+      doc.moveDown(3);
       
       const tips = generatePersonalizedTips(mealPlan, totalCalories);
       tips.forEach((tip, index) => {
         if (doc.y > 680) {
           doc.addPage();
+          doc.moveDown(2);
         }
         
-        doc.fillColor('#05d8a7').fontSize(12).font('Helvetica-Bold')
-           .text(`${tip.icon} ${tip.title}`, 60);
-        doc.fillColor('#666666').fontSize(9).font('Helvetica-Oblique')
-           .text(tip.category, 60);
+        // Tip box
+        doc.roundedRect(70, doc.y, 455, 70, 5).fillAndStroke('#f8fffe', '#018940');
+        
+        // Category tag
+        doc.fillColor('#05d8a7').fontSize(9).font('Helvetica-Bold')
+           .text(tip.category, 85, doc.y - 60);
+        
+        // Title
+        doc.fillColor('#018940').fontSize(12).font('Helvetica-Bold')
+           .text(tip.title, 85, doc.y - 45);
+        
+        // Content
         doc.fillColor('#333333').fontSize(10).font('Helvetica')
-           .text(tip.content, 60, doc.y, { width: 475, align: 'left' });
-        doc.moveDown(1);
+           .text(tip.content, 85, doc.y - 28, { width: 425, align: 'left' });
+        
+        doc.moveDown(3.8);
       });
       
       // Guidelines already on Page 1 - removed duplicate
       
       // Footer with Dashboard Link
       doc.moveDown(2);
-      doc.moveTo(50, doc.y).lineTo(545, doc.y).stroke('#e5e7eb');
+      doc.strokeColor('#e5e7eb').lineWidth(1)
+         .moveTo(70, doc.y).lineTo(525, doc.y).stroke();
       doc.moveDown(0.5);
       
       // Dashboard link
       doc.fillColor('#018940').fontSize(10).font('Helvetica-Bold')
-         .text('🌐 Access Your Dashboard: ', { align: 'center', continued: true })
+         .text('Access Your Dashboard: ', 70, doc.y, { continued: true })
          .fillColor('#05d8a7').text('wellnest.sbs/dashboard', { 
-           align: 'center',
            underline: true,
            link: 'https://wellnest.sbs/dashboard'
          });
       
-      doc.moveDown(0.3);
+      doc.moveDown(0.5);
       doc.fillColor('#999999').fontSize(9).font('Helvetica')
-         .text('Customize meals, track nutrition, and chat with AI | 📧 support@wellnest.sbs', { align: 'center' });
-      doc.text('Generated by WellNest AI Nutrition System', { align: 'center' });
-      doc.text(`© ${new Date().getFullYear()} WellNest Technologies. All rights reserved.`, { align: 'center' });
+         .text('Customize meals, track nutrition, and chat with AI | support@wellnest.sbs', 70);
+      doc.text('Generated by WellNest AI Nutrition System', 70);
+      doc.text(`© ${new Date().getFullYear()} WellNest Technologies. All rights reserved.`, 70);
       
       // Finalize PDF
       doc.end();
